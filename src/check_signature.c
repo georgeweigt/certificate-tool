@@ -6,7 +6,7 @@ int
 check_signature(struct certinfo *p, struct certinfo *q)
 {
 	int err = -1;
-	uint8_t hash[64], *z;
+	uint8_t hash[64], *buf;
 
 	// check that issuer matches subject
 
@@ -21,49 +21,49 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	case MD5_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = rsa_encrypt_signature(p, q);
-		err = check_md5_signature(p, z);
-		free(z);
+		buf = rsa_encrypt_signature(p, q);
+		err = check_md5_signature(p, buf);
+		free(buf);
 		break;
 
 	case SHA1_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = rsa_encrypt_signature(p, q);
-		err = check_sha1_signature(p, z);
-		free(z);
+		buf = rsa_encrypt_signature(p, q);
+		err = check_sha1_signature(p, buf);
+		free(buf);
 		break;
 
 	case SHA224_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = rsa_encrypt_signature(p, q);
-		err = check_sha224_signature(p, z);
-		free(z);
+		buf = rsa_encrypt_signature(p, q);
+		err = check_sha224_signature(p, buf);
+		free(buf);
 		break;
 
 	case SHA256_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = rsa_encrypt_signature(p, q);
-		err = check_sha256_signature(p, z);
-		free(z);
+		buf = rsa_encrypt_signature(p, q);
+		err = check_sha256_signature(p, buf);
+		free(buf);
 		break;
 
 	case SHA384_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = rsa_encrypt_signature(p, q);
-		err = check_sha384_signature(p, z);
-		free(z);
+		buf = rsa_encrypt_signature(p, q);
+		err = check_sha384_signature(p, buf);
+		free(buf);
 		break;
 
 	case SHA512_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = rsa_encrypt_signature(p, q);
-		err = check_sha512_signature(p, z);
-		free(z);
+		buf = rsa_encrypt_signature(p, q);
+		err = check_sha512_signature(p, buf);
+		free(buf);
 		break;
 
 	case ECDSA_WITH_SHA1:

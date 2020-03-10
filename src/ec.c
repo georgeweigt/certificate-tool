@@ -1,24 +1,14 @@
 #include "defs.h"
 
-// Elliptic curve functions
-//
-// ec_init()			Initialize curve parameters
-//
-// ecdsa256_verify()		Verify certificate signature
-// ecdsa384_verify()
-//
-// ecdhe256_verify_hash()	Verify emphemeral key hash
-// ecdhe384_verify_hash()
-
 #define len(p) (p)[-1]
 
 static int ec_malloc_count;
 static uint32_t *p256, *q256, *gx256, *gy256;
 static uint32_t *p384, *q384, *gx384, *gy384;
 
-// returns 0 for ok, -1 otherwise
+// is p signed by q? (returns 0 for yes, -1 for no)
 
-// p is the subject, q is the issuer
+// p is subject, q is issuer
 
 int
 ecdsa256_verify(struct certinfo *p, struct certinfo *q, uint8_t *hash, int hashlen)
@@ -257,9 +247,9 @@ ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 	ec_free_xyz(&R);
 }
 
-// returns 0 for ok, -1 otherwise
+// is p signed by q? (returns 0 for yes, -1 for no)
 
-// p is the subject, q is the issuer
+// p is subject, q is issuer
 
 int
 ecdsa384_verify(struct certinfo *p, struct certinfo *q, uint8_t *hash, int hashlen)
@@ -267,7 +257,7 @@ ecdsa384_verify(struct certinfo *p, struct certinfo *q, uint8_t *hash, int hashl
 	int err;
 	uint32_t *h, *r, *s, *x, *y;
 
-	if ((q->ec_key_length - 1) / 2 != 48)
+	if (q->ec_key_length != 97)
 		return -1;
 
 	if (p->r_length == 0 || p->s_length == 0)
