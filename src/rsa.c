@@ -30,7 +30,7 @@ rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 
 	n = y[-1]; // number of uint32_t in result
 
-	// copy to make big-endian
+	// copy to convert result to big endian
 
 	if (4 * n <= p->signature_length) {
 		for (i = 0; i < n; i++) {
