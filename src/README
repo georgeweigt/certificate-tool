@@ -1,0 +1,9 @@
+Functions for analyzing certificate files.
+
+The main function reads a self-signed certificate and verifies the signature.
+
+To build and run:
+
+	cd src
+	make
+	./ctool filename
