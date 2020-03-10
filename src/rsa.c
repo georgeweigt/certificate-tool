@@ -12,41 +12,41 @@ uint8_t *
 rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 {
 	int i, n;
-	uint8_t *z;
-	uint32_t *a, *b, *c, *y;
+	uint8_t *buf;
+	uint32_t *a, *b, *c, *d;
 
 	a = buf_to_int(p->cert_data + p->signature_offset, p->signature_length);
 	b = buf_to_int(q->cert_data + q->exponent_offset, q->exponent_length);
 	c = buf_to_int(q->cert_data + q->modulus_offset, q->modulus_length);
 
-	y = modpow(a, b, c);
+	d = modpow(a, b, c);
 
-	z = malloc(p->signature_length);
+	buf = malloc(p->signature_length);
 
-	if (z == NULL)
+	if (buf == NULL)
 		malloc_kaput();
 
-	bzero(z, p->signature_length);
+	bzero(buf, p->signature_length);
 
-	n = y[-1]; // number of uint32_t in result
+	n = d[-1]; // number of uint32_t in result
 
 	// copy to convert result to big endian
 
 	if (4 * n <= p->signature_length) {
 		for (i = 0; i < n; i++) {
-			z[p->signature_length - 4 * i - 4] = y[i] >> 24;
-			z[p->signature_length - 4 * i - 3] = y[i] >> 16;
-			z[p->signature_length - 4 * i - 2] = y[i] >> 8;
-			z[p->signature_length - 4 * i - 1] = y[i];
+			buf[p->signature_length - 4 * i - 4] = d[i] >> 24;
+			buf[p->signature_length - 4 * i - 3] = d[i] >> 16;
+			buf[p->signature_length - 4 * i - 2] = d[i] >> 8;
+			buf[p->signature_length - 4 * i - 1] = d[i];
 		}
 	}
 
 	mfree(a);
 	mfree(b);
 	mfree(c);
-	mfree(y);
+	mfree(d);
 
-	return z;
+	return buf;
 }
 
 void
