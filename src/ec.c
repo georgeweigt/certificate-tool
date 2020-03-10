@@ -43,7 +43,7 @@ ecdsa256_verify(struct certinfo *p, struct certinfo *q, uint8_t *hash, int hashl
 	x = ec_buf_to_bignum(q->cert_data + q->ec_key_offset + 1, 32); // first byte is 04
 	y = ec_buf_to_bignum(q->cert_data + q->ec_key_offset + 33, 32);
 
-	err = ecdsa256_verify_f(h, r, s, x, y);
+	err = ecdsa256_verify_nib(h, r, s, x, y);
 
 	ec_free(h);
 	ec_free(r);
@@ -73,7 +73,7 @@ ecdhe256_verify_hash(uint8_t *hash, int hashlen, uint8_t *rr, int r_length, uint
 	x = ec_buf_to_bignum(xx, 32);
 	y = ec_buf_to_bignum(yy, 32);
 
-	err = ecdsa256_verify_f(h, r, s, x, y);
+	err = ecdsa256_verify_nib(h, r, s, x, y);
 
 	ec_free(h);
 	ec_free(r);
@@ -95,7 +95,7 @@ ecdhe256_verify_hash(uint8_t *hash, int hashlen, uint8_t *rr, int r_length, uint
 //	x, y	public key
 
 int
-ecdsa256_verify_f(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t *y)
+ecdsa256_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t *y)
 {
 	int err;
 	uint32_t *u, *v, *w;
@@ -284,7 +284,7 @@ ecdsa384_verify(struct certinfo *p, struct certinfo *q, uint8_t *hash, int hashl
 	x = ec_buf_to_bignum(q->cert_data + q->ec_key_offset + 1, 48);
 	y = ec_buf_to_bignum(q->cert_data + q->ec_key_offset + 49, 48);
 
-	err = ecdsa384_verify_f(h, r, s, x, y);
+	err = ecdsa384_verify_nib(h, r, s, x, y);
 
 	ec_free(h);
 	ec_free(r);
@@ -314,7 +314,7 @@ ecdhe384_verify_hash(uint8_t *hash, int hashlen, uint8_t *rr, int r_length, uint
 	x = ec_buf_to_bignum(xx, 48);
 	y = ec_buf_to_bignum(yy, 48);
 
-	err = ecdsa384_verify_f(h, r, s, x, y);
+	err = ecdsa384_verify_nib(h, r, s, x, y);
 
 	ec_free(h);
 	ec_free(r);
@@ -336,7 +336,7 @@ ecdhe384_verify_hash(uint8_t *hash, int hashlen, uint8_t *rr, int r_length, uint
 //	x, y	public key
 
 int
-ecdsa384_verify_f(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t *y)
+ecdsa384_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t *y)
 {
 	int err;
 	uint32_t *u, *v, *w;
@@ -2172,7 +2172,7 @@ ec_test256()
 	r = ec_buf_to_bignum(sig, 32);
 	s = ec_buf_to_bignum(sig + 32, 32);
 
-	if (ecdsa256_verify_f(h, r, s, x, y) == 0)
+	if (ecdsa256_verify_nib(h, r, s, x, y) == 0)
 		printf("ok: ec_test256\n");
 	else
 		printf("err: ec_test256\n");
@@ -2249,7 +2249,7 @@ ec_test384()
 	r = ec_buf_to_bignum(sig, 48);
 	s = ec_buf_to_bignum(sig + 48, 48);
 
-	if (ecdsa384_verify_f(h, r, s, x, y) == 0)
+	if (ecdsa384_verify_nib(h, r, s, x, y) == 0)
 		printf("ok: ec_test384\n");
 	else
 		printf("err: ec_test384\n");
