@@ -14,7 +14,7 @@ Supported public key algorithms:
 	prime256v1 (NIST P-256)
 	secp384r1 (NIST P-384)
 
-Supported hash algorithms
+Supported hash algorithms:
 
 	MD5
 	SHA1
