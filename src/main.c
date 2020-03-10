@@ -8,7 +8,7 @@ main(int argc, char *argv[])
 	struct certinfo *p;
 
 	if (argc < 2)
-		filename = "cert.pem";
+		filename = "../tools/cert.pem";
 	else
 		filename = argv[1];
 

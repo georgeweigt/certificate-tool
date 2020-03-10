@@ -127,7 +127,7 @@ return 0;
 }
 
 int
-parse_cert_level_1(struct certinfo *p, unsigned char *cert, int end)
+parse_cert_level_1(struct certinfo *p, uint8_t *cert, int end)
 {
 	int err, type, length, offset = 0;
 
@@ -145,7 +145,7 @@ parse_cert_level_1(struct certinfo *p, unsigned char *cert, int end)
 }
 
 int
-parse_cert_level_2(struct certinfo *p, unsigned char *cert, int offset, int end)
+parse_cert_level_2(struct certinfo *p, uint8_t *cert, int offset, int end)
 {
 	int err, type, length;
 
@@ -185,7 +185,7 @@ parse_cert_level_2(struct certinfo *p, unsigned char *cert, int offset, int end)
 }
 
 int
-parse_cert_level_3(struct certinfo *p, unsigned char *cert, int offset, int end)
+parse_cert_level_3(struct certinfo *p, uint8_t *cert, int offset, int end)
 {
 	int err, type, length;
 
@@ -270,7 +270,7 @@ parse_cert_level_3(struct certinfo *p, unsigned char *cert, int offset, int end)
 }
 
 int
-parse_public_key(struct certinfo *p, unsigned char *cert, int offset, int end)
+parse_public_key(struct certinfo *p, uint8_t *cert, int offset, int end)
 {
 	int err, type, length;
 
@@ -328,7 +328,7 @@ parse_public_key(struct certinfo *p, unsigned char *cert, int offset, int end)
 }
 
 int
-parse_rsa_info(struct certinfo *p, unsigned char *cert, int offset, int end)
+parse_rsa_info(struct certinfo *p, uint8_t *cert, int offset, int end)
 {
 	int err, type, length;
 
@@ -377,7 +377,7 @@ parse_rsa_info(struct certinfo *p, unsigned char *cert, int offset, int end)
 }
 
 int
-parse_signature_algorithm(struct certinfo *p, unsigned char *cert, int offset, int end)
+parse_signature_algorithm(struct certinfo *p, uint8_t *cert, int offset, int end)
 {
 	int len = end - offset;
 
@@ -457,7 +457,7 @@ parse_signature_algorithm(struct certinfo *p, unsigned char *cert, int offset, i
 }
 
 int
-parse_signature(struct certinfo *p, unsigned char *cert, int offset, int end)
+parse_signature(struct certinfo *p, uint8_t *cert, int offset, int end)
 {
 	int err = -1;
 
@@ -505,7 +505,7 @@ parse_signature(struct certinfo *p, unsigned char *cert, int offset, int end)
 // offset = 550, the start of SEQUENCE
 
 int
-parse_ecdsa_signature(struct certinfo *p, unsigned char *cert, int offset, int end)
+parse_ecdsa_signature(struct certinfo *p, uint8_t *cert, int offset, int end)
 {
 	int err, length, type;
 
@@ -542,7 +542,7 @@ parse_ecdsa_signature(struct certinfo *p, unsigned char *cert, int offset, int e
 }
 
 int
-parse_validity(struct certinfo *p, unsigned char *cert, int offset, int end)
+parse_validity(struct certinfo *p, uint8_t *cert, int offset, int end)
 {
 	int err, length, type;
 
@@ -600,7 +600,7 @@ parse_validity(struct certinfo *p, unsigned char *cert, int offset, int end)
 }
 
 time_t
-convert_utc_time(unsigned char *s, int len)
+convert_utc_time(uint8_t *s, int len)
 {
 	int d[17], h, i, j, m;
 	struct tm tm;
@@ -691,7 +691,7 @@ convert_utc_time(unsigned char *s, int len)
 }
 
 time_t
-convert_generalized_time(unsigned char *s, int len)
+convert_generalized_time(uint8_t *s, int len)
 {
 	int i, d[14];
 	struct tm tm;
@@ -731,7 +731,7 @@ convert_generalized_time(unsigned char *s, int len)
 // offset is advanced to beginning of V in TLV
 
 int
-get_type_and_length(unsigned char *cert, int end, int *offset, int *type, int *length)
+get_type_and_length(uint8_t *cert, int end, int *offset, int *type, int *length)
 {
 	int i, k, l, n, t;
 	k = *offset;

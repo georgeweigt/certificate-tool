@@ -4,7 +4,7 @@ int
 base64_decode(uint8_t *buf, char *s, int length)
 {
 	int a, b, c, d, i, k;
-	unsigned w;
+	uint32_t w;
 
 	if (length % 4 != 0)
 		return -1;
