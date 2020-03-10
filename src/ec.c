@@ -153,7 +153,7 @@ ecdsa256_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t
 */
 
 void
-ecdsa256_sign_f(uint32_t *h, uint32_t *d, uint8_t *sig)
+ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 {
 	int i;
 	uint32_t *k, *r, *s, *t;
@@ -394,7 +394,7 @@ ecdsa384_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t
 */
 
 void
-ecdsa384_sign_f(uint32_t *h, uint32_t *d, uint8_t *sig)
+ecdsa384_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 {
 	int i;
 	uint32_t *k, *r, *s, *t;
@@ -2167,7 +2167,7 @@ ec_test256()
 	x = ec_hexstr_to_bignum(str_x);
 	y = ec_hexstr_to_bignum(str_y);
 
-	ecdsa256_sign_f(h, d, sig);
+	ecdsa256_sign_nib(h, d, sig);
 
 	r = ec_buf_to_bignum(sig, 32);
 	s = ec_buf_to_bignum(sig + 32, 32);
@@ -2244,7 +2244,7 @@ ec_test384()
 	x = ec_hexstr_to_bignum(str_x);
 	y = ec_hexstr_to_bignum(str_y);
 
-	ecdsa384_sign_f(h, d, sig);
+	ecdsa384_sign_nib(h, d, sig);
 
 	r = ec_buf_to_bignum(sig, 48);
 	s = ec_buf_to_bignum(sig + 48, 48);
