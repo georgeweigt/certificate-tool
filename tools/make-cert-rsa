@@ -9,8 +9,8 @@ openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out cert.pem -extfile
 rm ext.tmp
 
 # convert to DER for dumpasn1
-#openssl x509 -in cert.pem -inform PEM -out cert.der -outform DER
-#openssl rsa -in key.pem -inform PEM -out key.der -outform DER
+openssl x509 -in cert.pem -inform PEM -out cert.der -outform DER
+openssl rsa -in key.pem -inform PEM -out key.der -outform DER
 
 # print cert
-#openssl x509 -in cert.pem -noout -text
+openssl x509 -in cert.pem -noout -text

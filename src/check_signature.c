@@ -21,7 +21,7 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	case MD5_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = encrypt_signature_rsa(p, q);
+		z = rsa_encrypt_signature(p, q);
 		err = check_md5_signature(p, z);
 		free(z);
 		break;
@@ -29,7 +29,7 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	case SHA1_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = encrypt_signature_rsa(p, q);
+		z = rsa_encrypt_signature(p, q);
 		err = check_sha1_signature(p, z);
 		free(z);
 		break;
@@ -37,7 +37,7 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	case SHA224_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = encrypt_signature_rsa(p, q);
+		z = rsa_encrypt_signature(p, q);
 		err = check_sha224_signature(p, z);
 		free(z);
 		break;
@@ -45,7 +45,7 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	case SHA256_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = encrypt_signature_rsa(p, q);
+		z = rsa_encrypt_signature(p, q);
 		err = check_sha256_signature(p, z);
 		free(z);
 		break;
@@ -53,7 +53,7 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	case SHA384_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = encrypt_signature_rsa(p, q);
+		z = rsa_encrypt_signature(p, q);
 		err = check_sha384_signature(p, z);
 		free(z);
 		break;
@@ -61,7 +61,7 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	case SHA512_WITH_RSA_ENCRYPTION:
 		if (q->encryption_algorithm != RSA_ENCRYPTION)
 			break;
-		z = encrypt_signature_rsa(p, q);
+		z = rsa_encrypt_signature(p, q);
 		err = check_sha512_signature(p, z);
 		free(z);
 		break;

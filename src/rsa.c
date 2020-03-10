@@ -1,16 +1,19 @@
 #include "defs.h"
 
-// Encrypt certificate signature (recall that encrypt applied to signature is actually decrypt)
+// Returns (signature ** exponent) mod modulus
+//
+// (Recall that encrypt applied to signature is actually decrypt)
 //
 //	p	subject certificate (signature)
 //
-//	q	issuer certificate (key)
+//	q	issuer certificate (exponent, modulus)
 
-void
+uint8_t *
 rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 {
-	int i, n;
-	uint32_t *a, *b, *c, *y; // bignums
+	int i;
+	uint8_t *z;
+	uint32_t *a, *b, *c, *y;
 
 	a = buf_to_int(p->cert_data + p->signature_offset, p->signature_length);
 	b = buf_to_int(q->cert_data + q->exponent_offset, q->exponent_length);
@@ -18,23 +21,28 @@ rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 
 	y = modpow(a, b, c);
 
-	bzero(p->cert_data + p->signature_offset, p->signature_length);
+	z = malloc(p->signature_length);
 
-	n = y[-1]; // number of uint32_t in bignum y
+	if (z == NULL)
+		malloc_kaput();
 
-	for (i = 0; i < n; i++) {
+	bzero(z, p->signature_length);
+
+	for (i = 0; i < y[-1]; i++) {
 		if (p->signature_length - 4 * i - 4 < 0)
 			break; // buffer overrun
-		p->cert_data[p->signature_offset + p->signature_length - 4 * i - 4] = y[i] >> 24;
-		p->cert_data[p->signature_offset + p->signature_length - 4 * i - 3] = y[i] >> 16;
-		p->cert_data[p->signature_offset + p->signature_length - 4 * i - 2] = y[i] >> 8;
-		p->cert_data[p->signature_offset + p->signature_length - 4 * i - 1] = y[i];
+		z[p->signature_length - 4 * i - 4] = y[i] >> 24;
+		z[p->signature_length - 4 * i - 3] = y[i] >> 16;
+		z[p->signature_length - 4 * i - 2] = y[i] >> 8;
+		z[p->signature_length - 4 * i - 1] = y[i];
 	}
 
 	mfree(a);
 	mfree(b);
 	mfree(c);
 	mfree(y);
+
+	return z;
 }
 
 void
