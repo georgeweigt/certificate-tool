@@ -86,7 +86,7 @@ check_rsa_signature(struct certinfo *p, struct certinfo *q)
 }
 
 int
-check_md5_signature(struct certinfo *p, uint8_t *z)
+check_md5_signature(struct certinfo *p, uint8_t *buf)
 {
 	int i, k;
 	uint8_t hash[16];
@@ -98,32 +98,32 @@ check_md5_signature(struct certinfo *p, uint8_t *z)
 
 	k = 0;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (z[k++] != 1)
+	if (buf[k++] != 1)
 		return -1;
 
 	for (i = 0; i < p->signature_length - 37; i++)
-		if (z[k++] != 0xff)
+		if (buf[k++] != 0xff)
 			return -1;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (memcmp(z + k, "\x30\x20\x30\x0c\x06\x08\x2a\x86\x48\x86\xf7\x0d\x02\x05\x05\x00\x04\x10", 18) != 0)
+	if (memcmp(buf + k, "\x30\x20\x30\x0c\x06\x08\x2a\x86\x48\x86\xf7\x0d\x02\x05\x05\x00\x04\x10", 18) != 0)
 		return -1;
 
 	k += 18;
 
-	if (memcmp(z + k, hash, 16) != 0)
+	if (memcmp(buf + k, hash, 16) != 0)
 		return -1;
 
 	return 0; // ok
 }
 
 int
-check_sha1_signature(struct certinfo *p, uint8_t *z)
+check_sha1_signature(struct certinfo *p, uint8_t *buf)
 {
 	int i, k;
 	uint8_t hash[20];
@@ -135,32 +135,32 @@ check_sha1_signature(struct certinfo *p, uint8_t *z)
 
 	k = 0;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (z[k++] != 1)
+	if (buf[k++] != 1)
 		return -1;
 
 	for (i = 0; i < p->signature_length - 38; i++)
-		if (z[k++] != 0xff)
+		if (buf[k++] != 0xff)
 			return -1;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (memcmp(z + k, "\x30\x21\x30\x09\x06\x05\x2b\x0e\x03\x02\x1a\x05\x00\x04\x14", 15) != 0)
+	if (memcmp(buf + k, "\x30\x21\x30\x09\x06\x05\x2b\x0e\x03\x02\x1a\x05\x00\x04\x14", 15) != 0)
 		return -1;
 
 	k += 15;
 
-	if (memcmp(z + k, hash, 20) != 0)
+	if (memcmp(buf + k, hash, 20) != 0)
 		return -1;
 
 	return 0; // ok
 }
 
 int
-check_sha224_signature(struct certinfo *p, uint8_t *z)
+check_sha224_signature(struct certinfo *p, uint8_t *buf)
 {
 	int i, k;
 	uint8_t hash[28];
@@ -172,32 +172,32 @@ check_sha224_signature(struct certinfo *p, uint8_t *z)
 
 	k = 0;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (z[k++] != 1)
+	if (buf[k++] != 1)
 		return -1;
 
 	for (i = 0; i < p->signature_length - 50; i++)
-		if (z[k++] != 0xff)
+		if (buf[k++] != 0xff)
 			return -1;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (memcmp(z + k, "\x30\x29\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x04\x05\x00\x04\x18", 19) != 0)
+	if (memcmp(buf + k, "\x30\x29\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x04\x05\x00\x04\x18", 19) != 0)
 		return -1;
 
 	k += 19;
 
-	if (memcmp(z + k, hash, 28) != 0)
+	if (memcmp(buf + k, hash, 28) != 0)
 		return -1;
 
 	return 0; // ok
 }
 
 int
-check_sha256_signature(struct certinfo *p, uint8_t *z)
+check_sha256_signature(struct certinfo *p, uint8_t *buf)
 {
 	int i, k;
 	uint8_t hash[32];
@@ -209,32 +209,32 @@ check_sha256_signature(struct certinfo *p, uint8_t *z)
 
 	k = 0;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (z[k++] != 1)
+	if (buf[k++] != 1)
 		return -1;
 
 	for (i = 0; i < p->signature_length - 54; i++)
-		if (z[k++] != 0xff)
+		if (buf[k++] != 0xff)
 			return -1;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (memcmp(z + k, "\x30\x31\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\x05\x00\x04\x20", 19) != 0)
+	if (memcmp(buf + k, "\x30\x31\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\x05\x00\x04\x20", 19) != 0)
 		return -1;
 
 	k += 19;
 
-	if (memcmp(z + k, hash, 32) != 0)
+	if (memcmp(buf + k, hash, 32) != 0)
 		return -1;
 
 	return 0; // ok
 }
 
 int
-check_sha384_signature(struct certinfo *p, uint8_t *z)
+check_sha384_signature(struct certinfo *p, uint8_t *buf)
 {
 	int i, k;
 	uint8_t hash[48];
@@ -246,32 +246,32 @@ check_sha384_signature(struct certinfo *p, uint8_t *z)
 
 	k = 0;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (z[k++] != 1)
+	if (buf[k++] != 1)
 		return -1;
 
 	for (i = 0; i < p->signature_length - 70; i++)
-		if (z[k++] != 0xff)
+		if (buf[k++] != 0xff)
 			return -1;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (memcmp(z + k, "\x30\x41\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x02\x05\x00\x04\x30", 19) != 0)
+	if (memcmp(buf + k, "\x30\x41\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x02\x05\x00\x04\x30", 19) != 0)
 		return -1;
 
 	k += 19;
 
-	if (memcmp(z + k, hash, 48) != 0)
+	if (memcmp(buf + k, hash, 48) != 0)
 		return -1;
 
 	return 0; // ok
 }
 
 int
-check_sha512_signature(struct certinfo *p, uint8_t *z)
+check_sha512_signature(struct certinfo *p, uint8_t *buf)
 {
 	int i, k;
 	uint8_t hash[64];
@@ -283,25 +283,25 @@ check_sha512_signature(struct certinfo *p, uint8_t *z)
 
 	k = 0;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (z[k++] != 1)
+	if (buf[k++] != 1)
 		return -1;
 
 	for (i = 0; i < p->signature_length - 86; i++)
-		if (z[k++] != 0xff)
+		if (buf[k++] != 0xff)
 			return -1;
 
-	if (z[k++] != 0)
+	if (buf[k++] != 0)
 		return -1;
 
-	if (memcmp(z + k, "\x30\x51\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x03\x05\x00\x04\x40", 19) != 0)
+	if (memcmp(buf + k, "\x30\x51\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x03\x05\x00\x04\x40", 19) != 0)
 		return -1;
 
 	k += 19;
 
-	if (memcmp(z + k, hash, 64) != 0)
+	if (memcmp(buf + k, hash, 64) != 0)
 		return -1;
 
 	return 0; // ok
