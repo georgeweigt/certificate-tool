@@ -6,4 +6,4 @@ To build and run:
 
 	cd src
 	make
-	./ctool filename
+	./ctool cert.pem
