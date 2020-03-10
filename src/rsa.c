@@ -1,5 +1,7 @@
 #include "defs.h"
 
+#define MLENGTH(u) (u)[-1]
+
 // Returns (signature ** exponent) mod modulus
 //
 // (Recall that encrypt applied to signature is actually decrypt)
@@ -28,7 +30,7 @@ rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 
 	bzero(buf, p->signature_length);
 
-	n = d[-1]; // number of uint32_t in result
+	n = MLENGTH(d); // number of uint32_t in result
 
 	// copy to convert result to big endian
 
@@ -108,8 +110,6 @@ rsa_decrypt(uint8_t *buf, int len, struct keyinfo *ki)
 	mfree(q);
 	mfree(qinv);
 }
-
-#define MLENGTH(u) (u)[-1]
 
 // returns m + ceil(q / p) * p
 
