@@ -6,7 +6,6 @@ int
 check_signature(struct certinfo *p, struct certinfo *q)
 {
 	int err = -1;
-	uint8_t hash[64], *buf;
 
 	// check that issuer matches subject
 
@@ -16,74 +15,70 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	if (memcmp(p->cert_data + p->issuer_offset, q->cert_data + q->subject_offset, p->issuer_length) != 0)
 		return -1;
 
+	// switch on issuer's public key algorithm
+
+	switch (q->encryption_algorithm) {
+
+	case RSA_ENCRYPTION:
+		err = check_rsa_signature(p, q);
+		break;
+
+	case PRIME256V1:
+		err = ecdsa256_verify(p, q);
+		break;
+
+	case SECP384R1:
+		err = ecdsa384_verify(p, q);
+		break;
+	}
+
+	return err;
+}
+
+int
+check_rsa_signature(struct certinfo *p, struct certinfo *q)
+{
+	int err = -1;
+	uint8_t *buf;
+
+	// switch on subject's signature algorithm
+
 	switch (p->signature_algorithm) {
 
 	case MD5_WITH_RSA_ENCRYPTION:
-		if (q->encryption_algorithm != RSA_ENCRYPTION)
-			break;
 		buf = rsa_encrypt_signature(p, q);
 		err = check_md5_signature(p, buf);
 		free(buf);
 		break;
 
 	case SHA1_WITH_RSA_ENCRYPTION:
-		if (q->encryption_algorithm != RSA_ENCRYPTION)
-			break;
 		buf = rsa_encrypt_signature(p, q);
 		err = check_sha1_signature(p, buf);
 		free(buf);
 		break;
 
 	case SHA224_WITH_RSA_ENCRYPTION:
-		if (q->encryption_algorithm != RSA_ENCRYPTION)
-			break;
 		buf = rsa_encrypt_signature(p, q);
 		err = check_sha224_signature(p, buf);
 		free(buf);
 		break;
 
 	case SHA256_WITH_RSA_ENCRYPTION:
-		if (q->encryption_algorithm != RSA_ENCRYPTION)
-			break;
 		buf = rsa_encrypt_signature(p, q);
 		err = check_sha256_signature(p, buf);
 		free(buf);
 		break;
 
 	case SHA384_WITH_RSA_ENCRYPTION:
-		if (q->encryption_algorithm != RSA_ENCRYPTION)
-			break;
 		buf = rsa_encrypt_signature(p, q);
 		err = check_sha384_signature(p, buf);
 		free(buf);
 		break;
 
 	case SHA512_WITH_RSA_ENCRYPTION:
-		if (q->encryption_algorithm != RSA_ENCRYPTION)
-			break;
 		buf = rsa_encrypt_signature(p, q);
 		err = check_sha512_signature(p, buf);
 		free(buf);
-		break;
-
-	case ECDSA_WITH_SHA1:
-		sha1(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
-		err = check_ecdsa_signature(p, q, hash, 20);
-		break;
-
-	case ECDSA_WITH_SHA224:
-		sha224(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
-		err = check_ecdsa_signature(p, q, hash, 28);
-		break;
-
-	case ECDSA_WITH_SHA256:
-		sha256(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
-		err = check_ecdsa_signature(p, q, hash, 32);
-		break;
-
-	case ECDSA_WITH_SHA384:
-		sha384(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
-		err = check_ecdsa_signature(p, q, hash, 48);
 		break;
 	}
 
@@ -310,23 +305,4 @@ check_sha512_signature(struct certinfo *p, uint8_t *z)
 		return -1;
 
 	return 0; // ok
-}
-
-int
-check_ecdsa_signature(struct certinfo *p, struct certinfo *q, uint8_t *hash, int hashlen)
-{
-	int err = -1;
-
-	switch (q->encryption_algorithm) {
-
-	case PRIME256V1:
-		err = ecdsa256_verify(p, q, hash, hashlen);
-		break;
-
-	case SECP384R1:
-		err = ecdsa384_verify(p, q, hash, hashlen);
-		break;
-	}
-
-	return err;
 }

@@ -10,8 +10,6 @@ static uint32_t *p384, *q384, *gx384, *gy384;
 
 Returns 0 for yes, -1 for no
 
-Hash and hashlen are determined by the subject signature algorithm
-
 p->signature_algorithm is one of
 
 	ECDSA_WITH_SHA1 (20 byte hash)
@@ -24,21 +22,37 @@ q->encryption_algorithm is PRIME256V1
 */
 
 int
-ecdsa256_verify(struct certinfo *p, struct certinfo *q, uint8_t *hash, int hashlen)
+ecdsa256_verify(struct certinfo *p, struct certinfo *q)
 {
-	int err;
+	int err, len;
+	uint8_t hash[64];
 	uint32_t *h, *r, *s, *x, *y;
 
 	if (q->ec_key_length != 65)
 		return -1;
 
-	if (p->r_length == 0 || p->s_length == 0)
+	switch (p->signature_algorithm) {
+	case ECDSA_WITH_SHA1:
+		sha1(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 20;
+		break;
+	case ECDSA_WITH_SHA224:
+		sha224(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 28;
+		break;
+	case ECDSA_WITH_SHA256:
+		sha256(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 32;
+		break;
+	case ECDSA_WITH_SHA384:
+		sha384(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 32; // truncate 48 to 32
+		break;
+	default:
 		return -1;
+	}
 
-	if (hashlen > 32)
-		hashlen = 32;
-
-	h = ec_buf_to_bignum(hash, hashlen);
+	h = ec_buf_to_bignum(hash, len);
 
 	r = ec_buf_to_bignum(p->cert_data + p->r_offset, p->r_length);
 	s = ec_buf_to_bignum(p->cert_data + p->s_offset, p->s_length);
@@ -264,8 +278,6 @@ ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 
 Returns 0 for yes, -1 for no
 
-Hash and hashlen are determined by the subject signature algorithm
-
 p->signature_algorithm is one of
 
 	ECDSA_WITH_SHA1 (20 byte hash)
@@ -278,26 +290,42 @@ q->encryption_algorithm is SECP384R1
 */
 
 int
-ecdsa384_verify(struct certinfo *p, struct certinfo *q, uint8_t *hash, int hashlen)
+ecdsa384_verify(struct certinfo *p, struct certinfo *q)
 {
-	int err;
+	int err, len;
+	uint8_t hash[64];
 	uint32_t *h, *r, *s, *x, *y;
 
 	if (q->ec_key_length != 97)
 		return -1;
 
-	if (p->r_length == 0 || p->s_length == 0)
+	switch (p->signature_algorithm) {
+	case ECDSA_WITH_SHA1:
+		sha1(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 20;
+		break;
+	case ECDSA_WITH_SHA224:
+		sha224(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 28;
+		break;
+	case ECDSA_WITH_SHA256:
+		sha256(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 32;
+		break;
+	case ECDSA_WITH_SHA384:
+		sha384(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 48;
+		break;
+	default:
 		return -1;
+	}
 
-	if (hashlen > 48)
-		hashlen = 48;
-
-	h = ec_buf_to_bignum(hash, hashlen);
+	h = ec_buf_to_bignum(hash, len);
 
 	r = ec_buf_to_bignum(p->cert_data + p->r_offset, p->r_length);
 	s = ec_buf_to_bignum(p->cert_data + p->s_offset, p->s_length);
 
-	x = ec_buf_to_bignum(q->cert_data + q->ec_key_offset + 1, 48);
+	x = ec_buf_to_bignum(q->cert_data + q->ec_key_offset + 1, 48); // first byte is 04
 	y = ec_buf_to_bignum(q->cert_data + q->ec_key_offset + 49, 48);
 
 	err = ecdsa384_verify_nib(h, r, s, x, y);
