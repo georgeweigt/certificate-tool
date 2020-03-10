@@ -1,6 +1,6 @@
 #include "defs.h"
 
-// is p signed by q? (returns 0 for yes)
+// is p signed by q? (returns 0 for yes, -1 for no)
 
 int
 check_signature(struct certinfo *p, struct certinfo *q)
@@ -11,10 +11,10 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	// check that issuer matches subject
 
 	if (p->issuer_length != q->subject_length)
-		return 0;
+		return -1;
 
 	if (memcmp(p->cert_data + p->issuer_offset, q->cert_data + q->subject_offset, p->issuer_length) != 0)
-		return 0;
+		return -1;
 
 	switch (p->signature_algorithm) {
 
