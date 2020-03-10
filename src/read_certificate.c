@@ -33,10 +33,8 @@ read_certificate(char *filename)
 
 	p = malloc(sizeof (struct certinfo) + n);
 
-	if (p == NULL) {
-		fclose(f);
-		return NULL;
-	}
+	if (p == NULL)
+		malloc_kaput();
 
 	s = (char *) p->cert_data;
 

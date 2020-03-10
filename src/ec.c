@@ -1680,10 +1680,8 @@ ec_new(int n)
 {
 	uint32_t *p;
 	p = (uint32_t *) malloc((n + 1) * sizeof (uint32_t));
-	if (p == NULL) {
-		printf("malloc kaput\n");
-		exit(1);
-	}
+	if (p == NULL)
+		malloc_kaput();
 	*p = n;
 	ec_malloc_count++;
 	return p + 1;
