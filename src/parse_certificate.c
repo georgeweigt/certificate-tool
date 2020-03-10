@@ -69,8 +69,6 @@ parse_certificate(struct certinfo *p)
 	if (err)
 		return -1;
 
-return 0;
-
 	// signature algorithms must match
 
 	if (p->algorithm_length != p->signature_algorithm_length) {

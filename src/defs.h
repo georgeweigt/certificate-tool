@@ -132,7 +132,23 @@ struct certinfo {
 	int s_length;
 
 	int encryption_algorithm;
+					// (type of public key, derived from data at public_key_offset)
+					// RSA_ENCRYPTION
+					// SECP384R1
+					// PRIME256V1
+
 	int signature_algorithm;
+					// (derived from data at signature_algorithm_offset)
+					// MD5_WITH_RSA_ENCRYPTION
+					// SHA1_WITH_RSA_ENCRYPTION
+					// SHA224_WITH_RSA_ENCRYPTION
+					// SHA256_WITH_RSA_ENCRYPTION
+					// SHA384_WITH_RSA_ENCRYPTION
+					// SHA512_WITH_RSA_ENCRYPTION
+					// ECDSA_WITH_SHA1
+					// ECDSA_WITH_SHA224
+					// ECDSA_WITH_SHA256
+					// ECDSA_WITH_SHA384
 
 	time_t not_before;
 	time_t not_after;
