@@ -159,4 +159,10 @@ struct certinfo {
 	uint8_t cert_data[0];
 };
 
+struct point {
+	uint32_t *x, *y, *z;
+};
+
+#define Trace printf("%s %d\n", __FUNCTION__, __LINE__);
+
 #include "prototypes.h"

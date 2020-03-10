@@ -6,6 +6,11 @@ main.o \
 read_certificate.o \
 parse_certificate.o \
 base64.o \
+check_signature.o \
+encrypt_signature_rsa.o \
+rsa.o \
+ec.o \
+md5.o \
 sha1.o \
 sha224.o \
 sha256.o \

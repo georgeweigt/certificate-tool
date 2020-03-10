@@ -7,6 +7,8 @@ main(int argc, char *argv[])
 	char *filename;
 	struct certinfo *p;
 
+	ec_init();
+
 	if (argc < 2)
 		filename = "../tools/cert.pem";
 	else
@@ -26,6 +28,13 @@ main(int argc, char *argv[])
 		return 1;
 	}
 
+	err = check_signature(p, p);
+
+	if (err) {
+		printf("error in signature\n");
+		return 1;
+	}
+
 	printf("ok\n");
 
 	return 0;
@@ -42,4 +51,11 @@ print_buf(uint8_t *buf, int length)
 	}
 	if (length % 16)
 		printf("\n");
+}
+
+void
+malloc_kaput(void)
+{
+	fprintf(stderr, "malloc kaput\n");
+	exit(1);
 }
