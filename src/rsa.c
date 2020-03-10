@@ -11,7 +11,7 @@
 uint8_t *
 rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 {
-	int i;
+	int i, n;
 	uint8_t *z;
 	uint32_t *a, *b, *c, *y;
 
@@ -28,9 +28,13 @@ rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 
 	bzero(z, p->signature_length);
 
-	for (i = 0; i < y[-1]; i++) {
+	n = y[-1]; // number of uint32_t in result
+
+	// copy to make big-endian
+
+	for (i = 0; i < n; i++) {
 		if (p->signature_length - 4 * i - 4 < 0)
-			break; // buffer overrun
+			break; // buffer overrun, too many uint32_t in result
 		z[p->signature_length - 4 * i - 4] = y[i] >> 24;
 		z[p->signature_length - 4 * i - 3] = y[i] >> 16;
 		z[p->signature_length - 4 * i - 2] = y[i] >> 8;
