@@ -32,13 +32,13 @@ rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 
 	// copy to make big-endian
 
-	for (i = 0; i < n; i++) {
-		if (p->signature_length - 4 * i - 4 < 0)
-			break; // buffer overrun, too many uint32_t in result
-		z[p->signature_length - 4 * i - 4] = y[i] >> 24;
-		z[p->signature_length - 4 * i - 3] = y[i] >> 16;
-		z[p->signature_length - 4 * i - 2] = y[i] >> 8;
-		z[p->signature_length - 4 * i - 1] = y[i];
+	if (4 * n <= p->signature_length) {
+		for (i = 0; i < n; i++) {
+			z[p->signature_length - 4 * i - 4] = y[i] >> 24;
+			z[p->signature_length - 4 * i - 3] = y[i] >> 16;
+			z[p->signature_length - 4 * i - 2] = y[i] >> 8;
+			z[p->signature_length - 4 * i - 1] = y[i];
+		}
 	}
 
 	mfree(a);
