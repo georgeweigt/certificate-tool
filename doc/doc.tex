@@ -2,6 +2,62 @@
 \usepackage[margin=2cm]{geometry}
 \begin{document}
 
+\section{RSA}
+
+\subsection{Public key format}
+
+\noindent
+The two integers are the modulus followed by the exponent.
+This example is for RSA 2048 which has a 256 byte modulus.
+
+\begin{verbatim}
+171 290:     SEQUENCE {
+175  13:       SEQUENCE {
+177   9:         OBJECT IDENTIFIER rsaEncryption (1 2 840 113549 1 1 1)
+188   0:         NULL
+       :         }
+190 271:       BIT STRING, encapsulates {
+195 266:         SEQUENCE {
+199 257:           INTEGER
+       :             00 E0 B4 48 A2 63 21 EC 0F 9F 80 78 3B B7 27 DE
+       :             8E 0A EB C7 F0 F2 41 02 D5 30 AD 61 E0 23 25 03
+       :             9D 25 14 18 A2 F2 53 50 F4 2C 32 DF 0F 8D EA 90
+       :             83 5B 3E 7C 64 2B 58 0E 02 E6 1F D1 DB 63 86 31
+       :             F2 C2 C5 E6 2C E6 F5 89 63 3A D1 9F A9 4E 2C BE
+       :             BB 03 1A 63 49 D7 5C B4 48 49 90 CB 37 3F 87 19
+       :             C4 DE BC DC 3D E4 1F 69 3D EA 5A E9 88 76 B3 81
+       :             69 97 E2 C6 D2 F3 F0 55 02 50 26 8F 78 C3 71 BF
+       :                     [ Another 129 bytes skipped ]
+460   3:           INTEGER 65537
+       :           }
+       :         }
+       :       }
+\end{verbatim}
+
+\subsection{Signature format}
+
+\noindent
+The signature length is the same as the RSA modulus.
+
+\begin{verbatim}
+515  13:   SEQUENCE {
+517   9:     OBJECT IDENTIFIER sha256WithRSAEncryption (1 2 840 113549 1 1 11)
+528   0:     NULL
+       :     }
+530 257:   BIT STRING
+       :     76 B6 97 82 0F 06 B7 48 59 02 A0 2C F4 2E 63 B2
+       :     0A BD D3 8B B3 B2 0B 0C A8 35 A7 66 64 97 86 36
+       :     F6 AA 0F B5 A8 AE E1 07 16 9F 72 11 60 9F DB 6E
+       :     A4 60 33 D7 D9 ED 07 07 88 9A BB 4F 31 A9 EC F3
+       :     42 AA 23 B3 89 EC 31 BB 8D B1 8A A5 A9 51 7B E3
+       :     E6 E6 3F 6B 26 A2 B3 F2 86 6A A7 41 54 3B CC B2
+       :     FA 76 8C 10 93 63 25 86 58 29 C8 7E 1D 33 C9 50
+       :     FE 1D 73 78 6B 58 55 15 58 78 EC 9D A3 B9 40 A3
+       :             [ Another 128 bytes skipped ]
+       :   }
+\end{verbatim}
+
+\newpage
 \section{prime256v1}
 
 \subsection{Public key format}
