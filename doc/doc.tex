@@ -30,7 +30,7 @@ Bit string is $04\Vert X\Vert Y$ where both $X$ and $Y$ are 32 bytes long.
 \noindent
 The two integers are $R$ followed by $S$, both 32 bytes long.
 Integer format requires the first octet to be less than 128
-hence $R$ is 33 bytes long with a leading 00.
+hence in this example $R$ is 33 bytes long with a leading 00.
 
 \begin{verbatim}
 253  10:   SEQUENCE {
@@ -81,7 +81,7 @@ Bit string is $04\Vert X\Vert Y$ where both $X$ and $Y$ are 48 bytes long.
 \noindent
 The two integers are $R$ followed by $S$, both 48 bytes long.
 Integer format requires the first octet to be less than 128
-hence $S$ is 47 bytes long with a leading 00.
+hence in this example $S$ is 47 bytes long with a leading 00.
 
 \begin{verbatim}
 283  10:   SEQUENCE {
