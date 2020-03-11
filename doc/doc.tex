@@ -69,9 +69,16 @@ Hence there are $256-3-19-32=202$ pad bytes.
 \bigskip
 \noindent
 Note that the above signature is the unencrypted value of $s$.
-In the actual certificate $P$, $s$ is encrypted using $Q$'s private key.
-To verify that $P$ is signed by $Q$, $s$ is decrypted using $Q$'s public key $k$.
-Then if HASH matches a digest of $P$, the signing of $P$ by $Q$ is verified.
+In the actual certificate $P$, $s$ is encrypted using the secret key associated with $k$.
+To prove that $P$ is signed by $Q$, $s$ is decrypted using $Q$'s public key $k$.
+Then if HASH matches a digest of $P$, the signing of $P$ by $Q$ is proven.
+
+\bigskip
+\noindent
+Proving ``$P$ signed by $Q$'' proves that $s$ was encrypted using the secret key associated with $k$.
+No one can alter the contents of $P$ without breaking the hash digest in $s$,
+and no one can alter $s$ without knowing the secret key.
+Hence we can trust the contents of $P$ if we trust $Q$.
 
 \newpage
 \section{RSA}
