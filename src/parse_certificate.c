@@ -38,10 +38,12 @@
 #define STR_SHA256_WITH_RSA_ENCRYPTION "\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01\x01\x0b\x05\x00"
 #define STR_SHA384_WITH_RSA_ENCRYPTION "\x06\x09\x2A\x86\x48\x86\xF7\x0D\x01\x01\x0C\x05\x00"
 #define STR_SHA512_WITH_RSA_ENCRYPTION "\x06\x09\x2A\x86\x48\x86\xF7\x0D\x01\x01\x0D\x05\x00"
-#define STR_ECDSA_WITH_SHA1 "\x06\x07\x2A\x86\x48\xCE\x3D\x04\x01"
-#define STR_ECDSA_WITH_SHA224 "\x06\x08\x2A\x86\x48\xCE\x3D\x04\x03\x01"
-#define STR_ECDSA_WITH_SHA256 "\x06\x08\x2A\x86\x48\xCE\x3D\x04\x03\x02"
-#define STR_ECDSA_WITH_SHA384 "\x06\x08\x2A\x86\x48\xCE\x3D\x04\x03\x03"
+
+#define STR_ECDSA_WITH_SHA1 "\x06\x07\x2a\x86\x48\xce\x3d\x04\x01"
+#define STR_ECDSA_WITH_SHA224 "\x06\x08\x2a\x86\x48\xce\x3d\x04\x03\x01"
+#define STR_ECDSA_WITH_SHA256 "\x06\x08\x2a\x86\x48\xce\x3d\x04\x03\x02"
+#define STR_ECDSA_WITH_SHA384 "\x06\x08\x2a\x86\x48\xce\x3d\x04\x03\x03"
+#define STR_ECDSA_WITH_SHA512 "\x06\x08\x2a\x86\x48\xce\x3d\x04\x03\x04"
 
 int
 parse_certificate(struct certinfo *p)
@@ -449,6 +451,13 @@ parse_signature_algorithm(struct certinfo *p, uint8_t *cert, int offset, int end
 		return 0;
 	}
 
+	// ecdsaWithSHA512?
+
+	if (len == 10 && memcmp(cert + offset, STR_ECDSA_WITH_SHA512, 10) == 0) {
+		p->signature_algorithm = ECDSA_WITH_SHA512;
+		return 0;
+	}
+
 	p->line = __LINE__;
 
 	return -1;
@@ -472,11 +481,11 @@ parse_signature(struct certinfo *p, uint8_t *cert, int offset, int end)
 	case ECDSA_WITH_SHA224:
 	case ECDSA_WITH_SHA256:
 	case ECDSA_WITH_SHA384:
+	case ECDSA_WITH_SHA512:
 		err = parse_ecdsa_signature(p, cert, offset, end);
 		break;
 	default:
 		p->line = __LINE__;
-		err = -1;
 		break;
 	}
 

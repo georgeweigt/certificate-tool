@@ -16,6 +16,7 @@ p->signature_algorithm is one of
 	ECDSA_WITH_SHA224 (28 byte hash)
 	ECDSA_WITH_SHA256 (32 byte hash)
 	ECDSA_WITH_SHA384 (48 byte hash)
+	ECDSA_WITH_SHA512 (64 byte hash)
 
 q->encryption_algorithm is PRIME256V1
 
@@ -47,6 +48,10 @@ ecdsa256_verify(struct certinfo *p, struct certinfo *q)
 	case ECDSA_WITH_SHA384:
 		sha384(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
 		len = 32; // truncate 48 to 32
+		break;
+	case ECDSA_WITH_SHA512:
+		sha512(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 32; // truncate 64 to 32
 		break;
 	default:
 		return -1;
@@ -284,6 +289,7 @@ p->signature_algorithm is one of
 	ECDSA_WITH_SHA224 (28 byte hash)
 	ECDSA_WITH_SHA256 (32 byte hash)
 	ECDSA_WITH_SHA384 (48 byte hash)
+	ECDSA_WITH_SHA512 (64 byte hash)
 
 q->encryption_algorithm is SECP384R1
 
@@ -315,6 +321,10 @@ ecdsa384_verify(struct certinfo *p, struct certinfo *q)
 	case ECDSA_WITH_SHA384:
 		sha384(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
 		len = 48;
+		break;
+	case ECDSA_WITH_SHA512:
+		sha512(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		len = 48; // truncate 64 to 48
 		break;
 	default:
 		return -1;
