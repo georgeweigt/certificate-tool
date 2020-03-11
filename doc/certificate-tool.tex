@@ -46,17 +46,18 @@ For example, if $k$ is RSA 2048 then $s$ is a PKCS signature that is 2048 bits i
 \bigskip
 \noindent
 A hash digest of $P$ is contained in $s$.
-For example, the following unencrypted signature is for RSA 2048 and hash digest SHA256.
+For example, the following unencrypted signature $s$ is for RSA 2048 and hash digest SHA256.
 (Numerals are in hexadecimal.)
 
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|}
 \hline
-{\footnotesize\tt 00} & {\footnotesize\tt 01} &
-{\footnotesize\tt ff $\cdots$ ff} & {\footnotesize\tt 00} &
-{\footnotesize\tt 30 31 30 0d 06 09 60 86 48 01 65 03 04 02 01 05 00 04 20} & HASH\\
+{\footnotesize\tt 00 01 ff $\cdots$ ff 00 30 31 30 0d 06 09 60 86 48 01 65 03 04 02 01 05 00 04 20} & HASH\\
 \hline
 \end{tabular}
+
+\medskip
+Signature $s$ (plaintext)
 \end{center}
 
 \noindent
@@ -70,8 +71,24 @@ Hence there are $256-3-19-32=202$ pad bytes.
 \noindent
 Note that the above signature is the unencrypted value of $s$.
 In the actual certificate $P$, $s$ is encrypted using the secret key associated with $k$.
+After encryption, $s$ is still 256 bytes long but looks like this:
+
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+{\footnotesize\tt
+76 b6 97 82 0f 06 b7 48 59 02 a0 2c f4 $\cdots$
+fe c3 61 25 5b 1c da 77 9a a1 63 d4 49 cd}\\
+\hline
+\end{tabular}
+
+\medskip
+Signature $s$ (encrypted)
+\end{center}
+
+\noindent
 To prove that $P$ is signed by $Q$, $s$ is decrypted using $Q$'s public key $k$.
-Then if HASH matches a digest of $P$, the signing of $P$ by $Q$ is proven.
+Then if HASH matches the SHA256 digest of $P$, the signing of $P$ by $Q$ is proven.
 
 \bigskip
 \noindent
