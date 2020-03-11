@@ -1,5 +1,5 @@
 default:
-	pdflatex doc.tex
+	pdflatex certificate-tool.tex
 
 clean:
 	rm -f *.aux *.log *.synctex.gz
