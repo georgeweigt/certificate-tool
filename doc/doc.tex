@@ -2,6 +2,78 @@
 \usepackage[margin=2cm]{geometry}
 \begin{document}
 
+\section{Signing algorithm}
+
+\noindent
+Consider two certificates $P$ and $Q$ where $P$ is signed by $Q$.
+Let $s$ be the signature of $P$ and let $k$ be the public
+key of $Q$.
+
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+$\quad P\quad$\\
+\\
+\\
+\\
+\\
+\\
+\hline
+$s$\\
+\hline
+\end{tabular}
+\qquad
+\begin{tabular}{|c|}
+\hline
+$\quad Q\quad$\\
+\\
+\\
+\hline
+$k$\\
+\hline
+\\
+\\
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+By necessity $s$ and $k$ are compatible.
+For example, if $k$ is RSA 2048 then $s$ is a PKCS signature that is 2048 bits in length
+(256 bytes).
+
+\bigskip
+\noindent
+A hash digest of $P$ is contained in $s$.
+For example, the following unencrypted signature is for RSA 2048 and hash digest SHA256.
+(Numerals are in hexadecimal.)
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+{\footnotesize\tt 00} & {\footnotesize\tt 01} &
+{\footnotesize\tt ff $\cdots$ ff} & {\footnotesize\tt 00} &
+{\footnotesize\tt 30 31 30 0d 06 09 60 86 48 01 65 03 04 02 01 05 00 04 20} & HASH\\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+The length of HASH is 32 bytes because SHA256 is used.
+The 19 byte sequence starting with $\tt 30$ is from
+``Abstract Syntax Notation One.''
+The {\tt ff} bytes are pad bytes that are added to make the total length of the signature 2048 bits (256 bytes).
+Hence there are $256-3-19-32=202$ pad bytes.
+
+\bigskip
+\noindent
+Note that the above signature is the unencrypted value of $s$.
+In the actual certificate $P$, $s$ is encrypted using $Q$'s private key.
+To verify that $P$ is signed by $Q$, $s$ is decrypted using $Q$'s public key $k$.
+Then if HASH matches a digest of $P$, the signing of $P$ by $Q$ is verified.
+
+\newpage
 \section{RSA}
 
 \subsection{Public key format}
