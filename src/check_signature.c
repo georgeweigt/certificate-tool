@@ -7,7 +7,7 @@ check_signature(struct certinfo *p, struct certinfo *q)
 {
 	int err = -1;
 
-	// check that issuer matches subject
+	// check that p->issuer matches q->subject
 
 	if (p->issuer_length != q->subject_length)
 		return -1;
@@ -41,46 +41,38 @@ check_rsa_signature(struct certinfo *p, struct certinfo *q)
 	int err = -1;
 	uint8_t *buf;
 
+	buf = rsa_encrypt_signature(p, q);
+
 	// switch on subject's signature algorithm
 
 	switch (p->signature_algorithm) {
 
 	case MD5_WITH_RSA_ENCRYPTION:
-		buf = rsa_encrypt_signature(p, q);
 		err = check_md5_signature(p, buf);
-		free(buf);
 		break;
 
 	case SHA1_WITH_RSA_ENCRYPTION:
-		buf = rsa_encrypt_signature(p, q);
 		err = check_sha1_signature(p, buf);
-		free(buf);
 		break;
 
 	case SHA224_WITH_RSA_ENCRYPTION:
-		buf = rsa_encrypt_signature(p, q);
 		err = check_sha224_signature(p, buf);
-		free(buf);
 		break;
 
 	case SHA256_WITH_RSA_ENCRYPTION:
-		buf = rsa_encrypt_signature(p, q);
 		err = check_sha256_signature(p, buf);
-		free(buf);
 		break;
 
 	case SHA384_WITH_RSA_ENCRYPTION:
-		buf = rsa_encrypt_signature(p, q);
 		err = check_sha384_signature(p, buf);
-		free(buf);
 		break;
 
 	case SHA512_WITH_RSA_ENCRYPTION:
-		buf = rsa_encrypt_signature(p, q);
 		err = check_sha512_signature(p, buf);
-		free(buf);
 		break;
 	}
+
+	free(buf);
 
 	return err;
 }

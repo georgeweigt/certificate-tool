@@ -1,2 +1,4 @@
 *.der
 *.pem
+a.out
+dumpasn1.*
