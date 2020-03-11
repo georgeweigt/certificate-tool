@@ -1,0 +1,106 @@
+\documentclass[12pt]{article}
+\usepackage[margin=2cm]{geometry}
+\begin{document}
+
+\section{prime256v1}
+
+\subsection{Public key format}
+
+\noindent
+Bit string is $04\Vert X\Vert Y$ where both $X$ and $Y$ are 32 bytes long.
+
+\begin{verbatim}
+162  89:     SEQUENCE {
+164  19:       SEQUENCE {
+166   7:         OBJECT IDENTIFIER ecPublicKey (1 2 840 10045 2 1)
+175   8:         OBJECT IDENTIFIER prime256v1 (1 2 840 10045 3 1 7)
+       :         }
+185  66:       BIT STRING
+       :         04 AB AA 1E 30 A0 41 00 05 C5 7F 32 E3 99 B8 BE
+       :         3B 8A C1 4A A2 A3 4C CB 3C 44 97 04 4D D2 99 F1
+       :         E9 CD FE 63 B3 C4 B7 05 99 1B 94 1B 87 3B 47 BA
+       :         3A 76 AA 37 96 2F 89 47 31 53 EB 77 E6 43 17 D2
+       :         3B
+       :       }
+       :     }
+\end{verbatim}
+
+\subsection{Signature format}
+
+\noindent
+The two integers are $R$ followed by $S$, both 32 bytes long.
+Integer format requires the first octet to be less than 128
+hence $R$ is 33 bytes long with a leading 00.
+
+\begin{verbatim}
+253  10:   SEQUENCE {
+255   8:     OBJECT IDENTIFIER ecdsaWithSHA256 (1 2 840 10045 4 3 2)
+       :     }
+265  72:   BIT STRING, encapsulates {
+268  69:     SEQUENCE {
+270  33:       INTEGER
+       :         00 9F 3F A9 AE 97 A0 48 52 AA AA AF 3E CA BA 62
+       :         5F 6C 2C 46 BB 29 D0 19 A6 14 EA C0 5D 0E B9 B8
+       :         D5
+305  32:       INTEGER
+       :         16 76 0A FC 4D 9C 6F 65 BD D2 8B CA EF C5 6E 07
+       :         76 46 13 1D CF 39 A8 E3 80 D8 BD 2E B2 F9 89 0D
+       :       }
+       :     }
+       :   }
+\end{verbatim}
+
+\newpage
+\section{secp384r1}
+
+\subsection{Public key format}
+
+\noindent
+Bit string is $04\Vert X\Vert Y$ where both $X$ and $Y$ are 48 bytes long.
+
+\begin{verbatim}
+163 118:     SEQUENCE {
+165  16:       SEQUENCE {
+167   7:         OBJECT IDENTIFIER ecPublicKey (1 2 840 10045 2 1)
+176   5:         OBJECT IDENTIFIER secp384r1 (1 3 132 0 34)
+       :         }
+183  98:       BIT STRING
+       :         04 42 62 D9 F6 76 24 10 AE 1B 60 1F 59 45 C5 7D
+       :         69 89 A3 A7 29 92 40 E6 BF FD F0 D0 20 55 BD 97
+       :         5E 2B D8 BB 14 56 30 08 6E F0 02 A8 DB F4 DD C5
+       :         BD DD 69 AB 39 B9 32 FC 55 D4 D5 8C 70 8E 27 3C
+       :         AA A0 72 67 22 AB 1D DF 41 B5 D4 99 6D 32 7C 06
+       :         ED 48 9F 31 E5 BD 10 AA 09 E7 5B 19 B6 8D 23 43
+       :         27
+       :       }
+       :     }
+\end{verbatim}
+
+\subsection{Signature format}
+
+\noindent
+The two integers are $R$ followed by $S$, both 48 bytes long.
+Integer format requires the first octet to be less than 128
+hence $S$ is 47 bytes long with a leading 00.
+
+\begin{verbatim}
+283  10:   SEQUENCE {
+285   8:     OBJECT IDENTIFIER ecdsaWithSHA256 (1 2 840 10045 4 3 2)
+       :     }
+295 104:   BIT STRING, encapsulates {
+298 101:     SEQUENCE {
+300  48:       INTEGER
+       :         33 30 98 0F AA 4C 83 A1 0C 17 F9 3F 2F 05 F7 92
+       :         2B 97 E9 2E E5 63 33 26 29 36 10 4F 65 2F E4 BA
+       :         FF 14 09 0E 6B 07 BC 3D 8C 62 E0 4E 9C 4E B4 37
+350  49:       INTEGER
+       :         00 F6 6E EC 4F F9 5B 37 DC 8D E3 E9 B3 CA 13 0C
+       :         5A BE F4 72 E4 4B 7A B4 BF C7 05 F1 71 83 77 68
+       :         DF CF F3 CA B2 3E C5 8F E6 7E 34 B7 B4 AB 6F D5
+       :         4F
+       :       }
+       :     }
+       :   }
+\end{verbatim}
+
+\end{document}
