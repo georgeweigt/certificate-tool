@@ -99,26 +99,7 @@ struct certinfo {
 	int exponent_offset;
 	int exponent_length;
 
-// Example:
-//
-// 347 118:     SEQUENCE {
-// 349  16:       SEQUENCE {
-// 351   7:         OBJECT IDENTIFIER ecPublicKey (1 2 840 10045 2 1)
-// 360   5:         OBJECT IDENTIFIER secp384r1 (1 3 132 0 34)
-//        :         }
-// 367  98:       BIT STRING
-//        :         04 03 47 7B 2F 75 C9 82 15 85 FB 75 E4 91 16 D4
-//        :         AB 62 99 F5 3E 52 0B 06 CE 41 00 7F 97 E1 0A 24
-//        :         3C 1D 01 04 EE 3D D2 8D 09 97 0C E0 75 E4 FA FB
-//        :         77 8A 2A F5 03 60 4B 36 8B 16 23 16 AD 09 71 F4
-//        :         4A F4 28 50 B4 FE 88 1C 6E 3F 6C 2F 2F 09 59 5B
-//        :         A5 5B 0B 33 99 E2 C3 3D 89 F9 6A 2C EF B2 D3 06
-//        :         E9
-//        :       }
-//
-// ec_key_offset is the index of 04 in BIT STRING.
-
-	int ec_key_offset;
+	int ec_key_offset; // index of 04 in '04 | X | Y'
 	int ec_key_length;
 
 	int signature_algorithm_offset;
