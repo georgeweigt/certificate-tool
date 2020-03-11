@@ -254,7 +254,7 @@ ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 
 	// the signature is the pair (r, s)
 
-	bzero(sig, 64);
+	memset(sig, 0, 64);
 
 	for (i = 0; i < len(r); i++) {
 		sig[32 - 4 * i - 4] = r[i] >> 24;
@@ -527,7 +527,7 @@ ecdsa384_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 
 	// the signature is the pair (r, s)
 
-	bzero(sig, 96);
+	memset(sig, 0, 96);
 
 	for (i = 0; i < len(r); i++) {
 		sig[48 - 4 * i - 4] = r[i] >> 24;
@@ -2399,7 +2399,7 @@ ecdh_test()
 	int i;
 	char buf[48];
 
-	bzero(buf, 48);
+	memset(buf, 0, 48);
 
 	for (i = 0; i < len(SA.x); i++) {
 		buf[48 - 4 * i - 4] = SA.x[i] >> 24;
@@ -2412,7 +2412,7 @@ ecdh_test()
 
 	// print B's pre-master secret
 
-	bzero(buf, 48);
+	memset(buf, 0, 48);
 
 	for (i = 0; i < len(SB.x); i++) {
 		buf[48 - 4 * i - 4] = SB.x[i] >> 24;

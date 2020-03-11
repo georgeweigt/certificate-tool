@@ -28,7 +28,7 @@ rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 	if (buf == NULL)
 		malloc_kaput();
 
-	bzero(buf, p->signature_length);
+	memset(buf, 0, p->signature_length);
 
 	n = MLENGTH(d); // number of uint32_t in result
 
@@ -86,7 +86,7 @@ rsa_decrypt(uint8_t *buf, int len, struct keyinfo *ki)
 
 	a = madd(m2, b);
 
-	bzero(buf, len);
+	memset(buf, 0, len);
 
 	for (i = 0; i < a[-1]; i++) {
 		if (len - 4 * i - 4 < 0)

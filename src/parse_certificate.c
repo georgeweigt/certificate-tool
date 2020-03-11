@@ -654,7 +654,7 @@ convert_utc_time(uint8_t *s, int len)
 		d[i] = s[i] - '0';
 	}
 
-	bzero(&tm, sizeof tm);
+	memset(&tm, 0, sizeof tm);
 
 	tm.tm_year = 10 * d[0] + d[1];
 
@@ -715,7 +715,7 @@ convert_generalized_time(uint8_t *s, int len)
 		d[i] = s[i] - '0';
 	}
 
-	bzero(&tm, sizeof tm);
+	memset(&tm, 0, sizeof tm);
 
 	tm.tm_year = 1000 * d[0] + 100 * d[1] + 10 * d[2] + d[3] - 1900;
 	tm.tm_mon = 10 * d[4] + d[5] - 1;

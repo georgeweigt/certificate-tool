@@ -132,6 +132,7 @@ struct certinfo {
 					// ECDSA_WITH_SHA224
 					// ECDSA_WITH_SHA256
 					// ECDSA_WITH_SHA384
+					// ECDSA_WITH_SHA512
 
 	time_t not_before;
 	time_t not_after;
