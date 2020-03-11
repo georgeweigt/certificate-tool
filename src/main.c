@@ -24,7 +24,7 @@ main(int argc, char *argv[])
 	err = parse_certificate(p);
 
 	if (err) {
-		printf("error parsing certificate\n");
+		printf("error parsing certificate (see parse_certificate.c, line %d)\n", p->line);
 		return 1;
 	}
 

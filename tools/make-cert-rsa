@@ -5,7 +5,7 @@ name=eigenmath.org
 openssl genrsa -out key.pem 2048
 openssl req -new -key key.pem -out csr.pem -subj "/O=$name/CN=$name"
 echo -e "basicConstraints=critical,CA:true,pathlen:0\nsubjectAltName=DNS:$name" >ext.tmp
-openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out cert.pem -extfile ext.tmp
+openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out cert.pem -extfile ext.tmp -sha256
 rm ext.tmp
 
 # convert to DER for dumpasn1

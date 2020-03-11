@@ -38,263 +38,268 @@ check_signature(struct certinfo *p, struct certinfo *q)
 int
 check_rsa_signature(struct certinfo *p, struct certinfo *q)
 {
-	int err = -1;
-	uint8_t *buf;
-
-	buf = rsa_encrypt_signature(p, q);
+	int err;
+	uint8_t *buf, *sig = NULL;
 
 	// switch on subject's signature algorithm
 
 	switch (p->signature_algorithm) {
 
 	case MD5_WITH_RSA_ENCRYPTION:
-		err = check_md5_signature(p, buf);
+		sig = gen_pkcs_md5_signature(p);
 		break;
 
 	case SHA1_WITH_RSA_ENCRYPTION:
-		err = check_sha1_signature(p, buf);
+		sig = gen_pkcs_sha1_signature(p);
 		break;
 
 	case SHA224_WITH_RSA_ENCRYPTION:
-		err = check_sha224_signature(p, buf);
+		sig = gen_pkcs_sha224_signature(p);
 		break;
 
 	case SHA256_WITH_RSA_ENCRYPTION:
-		err = check_sha256_signature(p, buf);
+		sig = gen_pkcs_sha256_signature(p);
 		break;
 
 	case SHA384_WITH_RSA_ENCRYPTION:
-		err = check_sha384_signature(p, buf);
+		sig = gen_pkcs_sha384_signature(p);
 		break;
 
 	case SHA512_WITH_RSA_ENCRYPTION:
-		err = check_sha512_signature(p, buf);
+		sig = gen_pkcs_sha512_signature(p);
 		break;
 	}
 
+	if (sig == NULL)
+		return -1;
+
+	buf = rsa_encrypt_signature(p, q);
+
+	if (memcmp(buf, sig, p->signature_length) == 0)
+		err = 0;
+	else
+		err = -1;
+
 	free(buf);
+	free(sig);
 
 	return err;
 }
 
-int
-check_md5_signature(struct certinfo *p, uint8_t *buf)
+uint8_t *
+gen_pkcs_md5_signature(struct certinfo *p)
 {
-	int i, k;
-	uint8_t hash[16];
+	int k, n;
+	uint8_t *buf;
 
-	if (p->signature_length < 37) // 3 + 18 + 16
-		return -1;
+	n = p->signature_length - 37; // 3 + 18 + 16 = 37
 
-	md5(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+	if (n < 0)
+		return NULL;
+
+	buf = malloc(p->signature_length);
+
+	if (buf == NULL)
+		malloc_kaput();
 
 	k = 0;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
+	buf[k++] = 1;
 
-	if (buf[k++] != 1)
-		return -1;
+	memset(buf + k, 0xff, n);
 
-	for (i = 0; i < p->signature_length - 37; i++)
-		if (buf[k++] != 0xff)
-			return -1;
+	k += n;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
 
-	if (memcmp(buf + k, "\x30\x20\x30\x0c\x06\x08\x2a\x86\x48\x86\xf7\x0d\x02\x05\x05\x00\x04\x10", 18) != 0)
-		return -1;
+	memcpy(buf + k, "\x30\x20\x30\x0c\x06\x08\x2a\x86\x48\x86\xf7\x0d\x02\x05\x05\x00\x04\x10", 18);
 
 	k += 18;
 
-	if (memcmp(buf + k, hash, 16) != 0)
-		return -1;
+	md5(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
 
-	return 0; // ok
+	return buf;
 }
 
-int
-check_sha1_signature(struct certinfo *p, uint8_t *buf)
+uint8_t *
+gen_pkcs_sha1_signature(struct certinfo *p)
 {
-	int i, k;
-	uint8_t hash[20];
+	int k, n;
+	uint8_t *buf;
 
-	if (p->signature_length < 38) // 3 + 15 + 20
-		return -1;
+	n = p->signature_length - 38; // 3 + 15 + 20 = 38 bytes
 
-	sha1(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+	if (n < 0)
+		return NULL;
+
+	buf = malloc(p->signature_length);
+
+	if (buf == NULL)
+		malloc_kaput();
 
 	k = 0;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
+	buf[k++] = 1;
 
-	if (buf[k++] != 1)
-		return -1;
+	memset(buf + k, 0xff, n);
 
-	for (i = 0; i < p->signature_length - 38; i++)
-		if (buf[k++] != 0xff)
-			return -1;
+	k += n;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
 
-	if (memcmp(buf + k, "\x30\x21\x30\x09\x06\x05\x2b\x0e\x03\x02\x1a\x05\x00\x04\x14", 15) != 0)
-		return -1;
+	memcpy(buf + k, "\x30\x21\x30\x09\x06\x05\x2b\x0e\x03\x02\x1a\x05\x00\x04\x14", 15);
 
 	k += 15;
 
-	if (memcmp(buf + k, hash, 20) != 0)
-		return -1;
+	sha1(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
 
-	return 0; // ok
+	return buf;
 }
 
-int
-check_sha224_signature(struct certinfo *p, uint8_t *buf)
+uint8_t *
+gen_pkcs_sha224_signature(struct certinfo *p)
 {
-	int i, k;
-	uint8_t hash[28];
+	int k, n;
+	uint8_t *buf;
 
-	if (p->signature_length < 50) // 3 + 19 + 28
-		return -1;
+	n = p->signature_length - 50; // 3 + 19 + 28 = 50 bytes
 
-	sha224(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+	if (n < 0)
+		return NULL;
+
+	buf = malloc(p->signature_length);
+
+	if (buf == NULL)
+		malloc_kaput();
 
 	k = 0;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
+	buf[k++] = 1;
 
-	if (buf[k++] != 1)
-		return -1;
+	memset(buf + k, 0xff, n);
 
-	for (i = 0; i < p->signature_length - 50; i++)
-		if (buf[k++] != 0xff)
-			return -1;
+	k += n;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
 
-	if (memcmp(buf + k, "\x30\x29\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x04\x05\x00\x04\x18", 19) != 0)
-		return -1;
+	memcpy(buf + k, "\x30\x29\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x04\x05\x00\x04\x18", 19);
+
+	memcpy(buf + k, "\x30\x2d\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x04\x05\x00\x04\x1c", 19);
 
 	k += 19;
 
-	if (memcmp(buf + k, hash, 28) != 0)
-		return -1;
+	sha224(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
 
-	return 0; // ok
+	return buf;
 }
 
-int
-check_sha256_signature(struct certinfo *p, uint8_t *buf)
+uint8_t *
+gen_pkcs_sha256_signature(struct certinfo *p)
 {
-	int i, k;
-	uint8_t hash[32];
+	int k, n;
+	uint8_t *buf;
 
-	if (p->signature_length < 54) // 3 + 19 + 32
-		return -1;
+	n = p->signature_length - 54; // 3 + 19 + 32 = 54 bytes
 
-	sha256(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+	if (n < 0)
+		return NULL;
+
+	buf = malloc(p->signature_length);
+
+	if (buf == NULL)
+		malloc_kaput();
 
 	k = 0;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
+	buf[k++] = 1;
 
-	if (buf[k++] != 1)
-		return -1;
+	memset(buf + k, 0xff, n);
 
-	for (i = 0; i < p->signature_length - 54; i++)
-		if (buf[k++] != 0xff)
-			return -1;
+	k += n;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
 
-	if (memcmp(buf + k, "\x30\x31\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\x05\x00\x04\x20", 19) != 0)
-		return -1;
+	memcpy(buf + k, "\x30\x31\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\x05\x00\x04\x20", 19);
 
 	k += 19;
 
-	if (memcmp(buf + k, hash, 32) != 0)
-		return -1;
+	sha256(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
 
-	return 0; // ok
+	return buf;
 }
 
-int
-check_sha384_signature(struct certinfo *p, uint8_t *buf)
+uint8_t *
+gen_pkcs_sha384_signature(struct certinfo *p)
 {
-	int i, k;
-	uint8_t hash[48];
+	int k, n;
+	uint8_t *buf;
 
-	if (p->signature_length < 70) // 3 + 19 + 48 = 70
-		return -1;
+	n = p->signature_length - 70; // 3 + 19 + 48 = 70 bytes
 
-	sha384(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+	if (n < 0)
+		return NULL;
+
+	buf = malloc(p->signature_length);
+
+	if (buf == NULL)
+		malloc_kaput();
 
 	k = 0;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
+	buf[k++] = 1;
 
-	if (buf[k++] != 1)
-		return -1;
+	memset(buf + k, 0xff, n);
 
-	for (i = 0; i < p->signature_length - 70; i++)
-		if (buf[k++] != 0xff)
-			return -1;
+	k += n;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
 
-	if (memcmp(buf + k, "\x30\x41\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x02\x05\x00\x04\x30", 19) != 0)
-		return -1;
+	memcpy(buf + k, "\x30\x41\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x02\x05\x00\x04\x30", 19);
 
 	k += 19;
 
-	if (memcmp(buf + k, hash, 48) != 0)
-		return -1;
+	sha384(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
 
-	return 0; // ok
+	return buf;
 }
 
-int
-check_sha512_signature(struct certinfo *p, uint8_t *buf)
+uint8_t *
+gen_pkcs_sha512_signature(struct certinfo *p)
 {
-	int i, k;
-	uint8_t hash[64];
+	int k, n;
+	uint8_t *buf;
 
-	if (p->signature_length < 86) // 3 + 19 + 64 = 86
-		return -1;
+	n = p->signature_length - 86; // 3 + 19 + 64 = 86 bytes
 
-	sha512(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+	if (n < 0)
+		return NULL;
+
+	buf = malloc(p->signature_length);
+
+	if (buf == NULL)
+		malloc_kaput();
 
 	k = 0;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
+	buf[k++] = 1;
 
-	if (buf[k++] != 1)
-		return -1;
+	memset(buf + k, 0xff, n);
 
-	for (i = 0; i < p->signature_length - 86; i++)
-		if (buf[k++] != 0xff)
-			return -1;
+	k += n;
 
-	if (buf[k++] != 0)
-		return -1;
+	buf[k++] = 0;
 
-	if (memcmp(buf + k, "\x30\x51\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x03\x05\x00\x04\x40", 19) != 0)
-		return -1;
+	memcpy(buf + k, "\x30\x51\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x03\x05\x00\x04\x40", 19);
 
 	k += 19;
 
-	if (memcmp(buf + k, hash, 64) != 0)
-		return -1;
+	sha512(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
 
-	return 0; // ok
+	return buf;
 }
