@@ -99,8 +99,8 @@ struct certinfo {
 	int exponent_offset;
 	int exponent_length;
 
-	int ec_key_offset; // index of 04 in '04 | X | Y'
-	int ec_key_length;
+	int ec_key_offset; // offset of 04 in '04 | X | Y'
+	int ec_key_length; // length is 65 for prime256v1, 97 for secp384r1
 
 	int signature_algorithm_offset;
 	int signature_algorithm_length;
