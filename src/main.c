@@ -78,11 +78,11 @@ key(char *filename)
 		return;
 	}
 
-	print_key(p);
+	print_key_data(p);
 }
 
 void
-print_key(struct keyinfo *p)
+print_key_data(struct keyinfo *p)
 {
 	switch (p->key_type) {
 

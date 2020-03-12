@@ -58,7 +58,7 @@ void ecdh_test();
 int main(int argc, char *argv[]);
 void check(char *filename);
 void key(char *filename);
-void print_key(struct keyinfo *p);
+void print_key_data(struct keyinfo *p);
 void print_bss(char *s, uint8_t *buf, int length);
 void malloc_kaput(void);
 void hmac_md5(uint8_t *key, int keylen, uint8_t *buf, int len, uint8_t *out);
