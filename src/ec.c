@@ -6,21 +6,17 @@ static int ec_malloc_count;
 static uint32_t *p256, *q256, *gx256, *gy256;
 static uint32_t *p384, *q384, *gx384, *gy384;
 
-/* is p signed by q? (p is subject, q is issuer)
-
-Returns 0 for yes, -1 for no
-
-p->signature_algorithm is one of
-
-	ECDSA_WITH_SHA1 (20 byte hash)
-	ECDSA_WITH_SHA224 (28 byte hash)
-	ECDSA_WITH_SHA256 (32 byte hash)
-	ECDSA_WITH_SHA384 (48 byte hash)
-	ECDSA_WITH_SHA512 (64 byte hash)
-
-q->encryption_algorithm is PRIME256V1
-
-*/
+// is p signed by q? (returns 0 for yes, -1 for no)
+//
+// p->signature_algorithm is one of
+//
+//	ECDSA_WITH_SHA1 (20 byte hash)
+//	ECDSA_WITH_SHA224 (28 byte hash)
+//	ECDSA_WITH_SHA256 (32 byte hash)
+//	ECDSA_WITH_SHA384 (48 byte hash)
+//	ECDSA_WITH_SHA512 (64 byte hash)
+//
+// q->encryption_algorithm is PRIME256V1
 
 int
 ecdsa256_verify(struct certinfo *p, struct certinfo *q)
@@ -279,21 +275,17 @@ ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 	ec_free_xyz(&R);
 }
 
-/* is p signed by q? (p is subject, q is issuer)
-
-Returns 0 for yes, -1 for no
-
-p->signature_algorithm is one of
-
-	ECDSA_WITH_SHA1 (20 byte hash)
-	ECDSA_WITH_SHA224 (28 byte hash)
-	ECDSA_WITH_SHA256 (32 byte hash)
-	ECDSA_WITH_SHA384 (48 byte hash)
-	ECDSA_WITH_SHA512 (64 byte hash)
-
-q->encryption_algorithm is SECP384R1
-
-*/
+// is p signed by q? (returns 0 for yes, -1 for no)
+//
+// p->signature_algorithm is one of
+//
+//	ECDSA_WITH_SHA1 (20 byte hash)
+//	ECDSA_WITH_SHA224 (28 byte hash)
+//	ECDSA_WITH_SHA256 (32 byte hash)
+//	ECDSA_WITH_SHA384 (48 byte hash)
+//	ECDSA_WITH_SHA512 (64 byte hash)
+//
+// q->encryption_algorithm is SECP384R1
 
 int
 ecdsa384_verify(struct certinfo *p, struct certinfo *q)
