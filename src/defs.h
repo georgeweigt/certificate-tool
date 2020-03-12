@@ -16,8 +16,6 @@
 #define SEQUENCE 0x30
 #define SET 0x31
 
-// encryption algorithms
-
 #define RSA_ENCRYPTION 1
 #define PRIME256V1 2 // NIST P-256
 #define SECP384R1 3 // NIST P-384
@@ -38,6 +36,12 @@
 #define ECDSA_WITH_SHA512 11
 
 struct keyinfo {
+
+	int key_type;
+
+	int line; // debug info
+
+	// rsa
 
 	int modulus_offset;
 	int modulus_length;
@@ -63,8 +67,18 @@ struct keyinfo {
 	int coefficient_offset;
 	int coefficient_length;
 
+	// ec
+
+	int ec_oid_offset;
+	int ec_oid_length;
+
+	int ec_private_key_offset;
+	int ec_private_key_length;
+
+	// key data
+
 	int key_data_length;
-	unsigned char key_data[10000];
+	uint8_t key_data[0];
 };
 
 struct certinfo {

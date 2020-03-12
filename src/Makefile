@@ -5,6 +5,8 @@ objects = \
 main.o \
 read_certificate.o \
 parse_certificate.o \
+read_key_file.o \
+parse_key_data.o \
 base64.o \
 check_signature.o \
 rsa.o \

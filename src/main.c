@@ -9,6 +9,8 @@ main(int argc, char *argv[])
 
 	ec_init();
 
+	// print_private_key("../tools/key.pem");
+
 	if (argc < 2)
 		filename = "../tools/cert.pem";
 	else
@@ -27,6 +29,8 @@ main(int argc, char *argv[])
 		printf("error parsing certificate (see parse_certificate.c, line %d)\n", p->line);
 		return 1;
 	}
+
+	printf("checking signature\n");
 
 	err = check_signature(p, p);
 
@@ -48,6 +52,8 @@ print_buf(uint8_t *buf, int length)
 		printf("%02x", buf[i]);
 		if (i % 16 == 15)
 			printf("\n");
+		else
+			printf(" ");
 	}
 	if (length % 16)
 		printf("\n");
@@ -58,4 +64,69 @@ malloc_kaput(void)
 {
 	fprintf(stderr, "malloc kaput\n");
 	exit(1);
+}
+
+void
+print_private_key(char *filename)
+{
+	int err;
+	struct keyinfo *p;
+
+	p = read_key_file(filename);
+
+	if (p == NULL) {
+		printf("error reading key file\n");
+		exit(1);
+	}
+
+	err = parse_key_data(p);
+
+	if (err < 0) {
+		printf("error parsing key data (see parse_key_data.c, line %d)\n", p->line);
+		exit(1);
+	}
+
+	if (p->key_type == 0) {
+		printf("unsupported key type\n");
+		exit(1);
+	}
+
+	if (p->key_type == RSA_ENCRYPTION)
+		print_rsa_keys(p);
+	else
+		print_buf(p->key_data + p->ec_private_key_offset, p->ec_private_key_length);
+}
+
+void
+print_rsa_keys(struct keyinfo *p)
+{
+	print_rsa_key("modulus", p->key_data + p->modulus_offset, p->modulus_length);
+	print_rsa_key("public exponent", p->key_data + p->public_exponent_offset, p->public_exponent_length);
+	print_rsa_key("private exponent", p->key_data + p->private_exponent_offset, p->private_exponent_length);
+	print_rsa_key("prime1", p->key_data + p->prime1_offset, p->prime1_length);
+	print_rsa_key("prime2", p->key_data + p->prime2_offset, p->prime2_length);
+	print_rsa_key("exponent1", p->key_data + p->exponent1_offset, p->exponent1_length);
+	print_rsa_key("exponent2", p->key_data + p->exponent2_offset, p->exponent2_length);
+	print_rsa_key("coefficient", p->key_data + p->coefficient_offset, p->coefficient_length);
+}
+
+void
+print_rsa_key(char *s, uint8_t *buf, int length)
+{
+	int i;
+
+	printf("%s (%d bytes)\n", s, length);
+
+	for (i = 0; i < length; i++) {
+		printf("%02x", buf[i]);
+		if (i % 16 == 15)
+			printf("\n");
+		else
+			printf(" ");
+	}
+
+	if (length % 16)
+		printf("\n");
+
+	printf("\n");
 }

@@ -2,4 +2,6 @@
 *.pem
 *.swp
 a.out
-dumpasn1.*
+dumpasn1
+dumpasn1.c
+dumpasn1.cfg
