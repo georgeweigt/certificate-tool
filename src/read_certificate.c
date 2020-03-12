@@ -40,16 +40,18 @@ read_certificate(char *filename)
 
 	s = (char *) p->cert_data;
 
-	if (fgets(s, n, f) == NULL) {
-		fclose(f);
-		free(p);
-		return NULL;
-	}
+	// advance to beginning of certificate data
 
-	if (strcmp(s, "-----BEGIN CERTIFICATE-----\n") != 0) {
-		fclose(f);
-		free(p);
-		return NULL;
+	for (;;) {
+
+		if (fgets(s, n, f) == NULL) {
+			fclose(f);
+			free(p);
+			return NULL;
+		}
+
+		if (strcmp(s, "-----BEGIN CERTIFICATE-----\n") == 0)
+			break;
 	}
 
 	k = 0;

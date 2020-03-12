@@ -1,12 +1,22 @@
 Functions for analyzing certificate files.
 
-The main function reads a self-signed certificate and verifies the signature.
+The main function is a demo.
 
 To build and run:
 
 	cd src
 	make
-	./ctool cert.pem
+	./ctool
+
+To check a self-signed certificate's signature:
+
+	./ctool check cert.pem
+
+To print a private key:
+
+	./ctool key key.pem
+
+There are scripts in the tools directory for creating certificates.
 
 Supported public key algorithms:
 
