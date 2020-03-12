@@ -78,34 +78,48 @@ key(char *filename)
 		return;
 	}
 
-	if (p->key_type == RSA_ENCRYPTION)
-		print_rsa_keys(p);
-	else
-		print_buf(p->key_data + p->ec_private_key_offset, p->ec_private_key_length);
+	print_key(p);
 }
 
 void
-print_rsa_keys(struct keyinfo *p)
+print_key(struct keyinfo *p)
 {
-	print_rsa_key("modulus", p->key_data + p->modulus_offset, p->modulus_length);
-	print_rsa_key("public exponent", p->key_data + p->public_exponent_offset, p->public_exponent_length);
-	print_rsa_key("private exponent", p->key_data + p->private_exponent_offset, p->private_exponent_length);
-	print_rsa_key("prime1", p->key_data + p->prime1_offset, p->prime1_length);
-	print_rsa_key("prime2", p->key_data + p->prime2_offset, p->prime2_length);
-	print_rsa_key("exponent1", p->key_data + p->exponent1_offset, p->exponent1_length);
-	print_rsa_key("exponent2", p->key_data + p->exponent2_offset, p->exponent2_length);
-	print_rsa_key("coefficient", p->key_data + p->coefficient_offset, p->coefficient_length);
+	switch (p->key_type) {
+
+	case RSA_ENCRYPTION:
+		print_bss("modulus", p->key_data + p->modulus_offset, p->modulus_length);
+		print_bss("public exponent", p->key_data + p->public_exponent_offset, p->public_exponent_length);
+		print_bss("private exponent", p->key_data + p->private_exponent_offset, p->private_exponent_length);
+		print_bss("prime1", p->key_data + p->prime1_offset, p->prime1_length);
+		print_bss("prime2", p->key_data + p->prime2_offset, p->prime2_length);
+		print_bss("exponent1", p->key_data + p->exponent1_offset, p->exponent1_length);
+		print_bss("exponent2", p->key_data + p->exponent2_offset, p->exponent2_length);
+		print_bss("coefficient", p->key_data + p->coefficient_offset, p->coefficient_length);
+		break;
+
+	case PRIME256V1:
+		print_bss("prime256v1", p->key_data + p->ec_private_key_offset, p->ec_private_key_length);
+		break;
+
+	case SECP384R1:
+		print_bss("secp384r1", p->key_data + p->ec_private_key_offset, p->ec_private_key_length);
+		break;
+	}
 }
 
+// print block storage segment
+
 void
-print_rsa_key(char *s, uint8_t *buf, int length)
+print_bss(char *s, uint8_t *buf, int length)
 {
 	int i;
 
 	printf("%s (%d bytes)\n", s, length);
 
 	for (i = 0; i < length; i++) {
+
 		printf("%02x", buf[i]);
+
 		if (i % 16 == 15)
 			printf("\n");
 		else
@@ -116,21 +130,6 @@ print_rsa_key(char *s, uint8_t *buf, int length)
 		printf("\n");
 
 	printf("\n");
-}
-
-void
-print_buf(uint8_t *buf, int length)
-{
-	int i;
-	for (i = 0; i < length; i++) {
-		printf("%02x", buf[i]);
-		if (i % 16 == 15)
-			printf("\n");
-		else
-			printf(" ");
-	}
-	if (length % 16)
-		printf("\n");
 }
 
 void
