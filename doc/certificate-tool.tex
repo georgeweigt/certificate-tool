@@ -71,7 +71,7 @@ Hence there are $256-3-19-32=202$ pad bytes.
 \noindent
 Note that the above signature is the unencrypted value of $s$.
 In the actual certificate $P$, $s$ is encrypted using the secret key associated with $k$.
-After encryption, $s$ is still 256 bytes long but looks like this:
+After encryption, $s$ is still 256 bytes long.
 
 \begin{center}
 \begin{tabular}{|c|}
@@ -88,7 +88,7 @@ Signature $s$ (encrypted)
 
 \noindent
 To prove that $P$ is signed by $Q$, $s$ is decrypted using $Q$'s public key $k$.
-Then if HASH matches the SHA256 digest of $P$, the signing of $P$ by $Q$ is proven.
+Then if HASH matches a digest of $P$, the signing of $P$ by $Q$ is proven.
 
 \bigskip
 \noindent
