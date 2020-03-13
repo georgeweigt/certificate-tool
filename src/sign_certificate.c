@@ -1,6 +1,6 @@
 #include "defs.h"
 
-// sign p by q and return the result
+// Sign p with q and return the result
 
 struct certinfo *
 sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
