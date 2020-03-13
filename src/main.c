@@ -81,28 +81,32 @@ void
 key(char *filename)
 {
 	int err;
-	struct keyinfo *p;
+	struct keyinfo *key = NULL;
 
-	p = read_key_file(filename);
+	key = read_key_file(filename);
 
-	if (p == NULL) {
+	if (key == NULL) {
 		printf("error reading key file\n");
-		return;
+		goto done;
 	}
 
-	err = parse_key_data(p);
+	err = parse_key_data(key);
 
 	if (err < 0) {
-		printf("error parsing key data (see parse_key_data.c, line %d)\n", p->line);
-		return;
+		printf("error parsing key data (see parse_key_data.c, line %d)\n", key->line);
+		goto done;
 	}
 
-	if (p->key_type == 0) {
+	if (key->key_type == 0) {
 		printf("unsupported key type\n");
-		return;
+		goto done;
 	}
 
-	print_key_data(p);
+	print_key_data(key);
+
+done:
+	if (key)
+		free(key);
 }
 
 void
@@ -162,62 +166,61 @@ void
 sign(char *certfile1, char *certfile2, char *keyfile)
 {
 	int err, i, m, n;
-	struct certinfo *p, *q, *r;
-	struct keyinfo *key;
+	struct certinfo *p = NULL, *q = NULL, *r = NULL;
+	struct keyinfo *key = NULL;
 
 	p = read_certificate(certfile1);
 
 	if (p == NULL) {
 		fprintf(stderr, "error reading certificate %s\n", certfile1);
-		return;
+		goto done;
 	}
 
 	err = parse_certificate(p);
 
 	if (err) {
 		fprintf(stderr, "error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile1, p->line);
-		return;
+		goto done;
 	}
 
 	q = read_certificate(certfile2);
 
 	if (q == NULL) {
 		fprintf(stderr, "error reading certificate %s\n", certfile2);
-		return;
+		goto done;
 	}
 
 	err = parse_certificate(q);
 
 	if (err) {
 		fprintf(stderr, "error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile2, p->line);
-		return;
+		goto done;
 	}
 
 	key = read_key_file(keyfile);
 
 	if (key == NULL) {
 		fprintf(stderr, "error reading key %s\n", keyfile);
-		return;
+		goto done;
 	}
 
 	err = parse_key_data(key);
 
 	if (err < 0) {
 		fprintf(stderr, "error parsing key %s (see parse_key_data.c, line %d)\n", keyfile, p->line);
-		return;
+		goto done;
 	}
 
 	if (key->key_type != RSA_ENCRYPTION) {
 		fprintf(stderr, "unsupported key type\n");
-		return;
+		goto done;
 	}
 
 	r = sign_certificate(p, q, key);
 
 	if (r == NULL) {
-		free(r);
 		fprintf(stderr, "failed\n");
-		return;
+		goto done;
 	}
 
 	printf("-----BEGIN CERTIFICATE-----\n");
@@ -237,7 +240,15 @@ sign(char *certfile1, char *certfile2, char *keyfile)
 
 	printf("-----END CERTIFICATE-----\n");
 
-	free(r);
+done:
+	if (p)
+		free(p);
+	if (q)
+		free(q);
+	if (r)
+		free(r);
+	if (key)
+		free(key);
 }
 
 void
