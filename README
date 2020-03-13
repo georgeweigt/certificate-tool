@@ -8,15 +8,15 @@ To build and run:
 	make
 	./ctool
 
-To check that certificate A is signed by B:
+Check that certificate A is signed by B:
 
 	./ctool check A.pem B.pem
 
-To print a private key:
+Print a private key:
 
 	./ctool key key.pem
 
-To sign certificate A with B and save as C (only RSA supported):
+Sign certificate A with B and save as C (RSA only):
 
 	./ctool sign A.pem B.pem key.pem >C.pem
 
