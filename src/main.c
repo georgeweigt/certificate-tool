@@ -3,18 +3,26 @@
 int
 main(int argc, char *argv[])
 {
-	if (argc < 3)
-		return 1;
-
 	ec_init();
 
 	if (strcmp(argv[1], "check") == 0) {
-		check(argv[2]);
+		if (argc < 4)
+			return 1;
+		check(argv[2], argv[3]);
 		return 0;
 	}
 
 	if (strcmp(argv[1], "key") == 0) {
+		if (argc < 3)
+			return 1;
 		key(argv[2]);
+		return 0;
+	}
+
+	if (strcmp(argv[1], "sign") == 0) {
+		if (argc < 5)
+			return 1;
+		sign(argv[2], argv[3], argv[4]);
 		return 0;
 	}
 
@@ -22,35 +30,51 @@ main(int argc, char *argv[])
 }
 
 void
-check(char *filename)
+check(char *certfile1, char *certfile2)
 {
 	int err;
-	struct certinfo *p;
+	struct certinfo *p = NULL, *q = NULL;
 
-	printf("checking signature of %s\n", filename);
-
-	p = read_certificate(filename);
+	p = read_certificate(certfile1);
 
 	if (p == NULL) {
-		printf("error reading certificate\n");
-		return;
+		printf("error reading certificate %s\n", certfile1);
+		goto done;
 	}
 
 	err = parse_certificate(p);
 
 	if (err) {
-		printf("error parsing certificate (see parse_certificate.c, line %d)\n", p->line);
-		return;
+		printf("error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile1, p->line);
+		goto done;
 	}
 
-	err = check_signature(p, p);
+	q = read_certificate(certfile2);
+
+	if (q == NULL) {
+		printf("error reading certificate %s\n", certfile2);
+		goto done;
+	}
+
+	err = parse_certificate(q);
 
 	if (err) {
-		printf("error in signature\n");
+		printf("error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile2, q->line);
 		return;
 	}
 
-	printf("ok\n");
+	err = check_signature(p, q);
+
+	if (err == 0)
+		printf("yes\n");
+	else
+		printf("no\n");
+
+done:
+	if (p)
+		free(p);
+	if (q)
+		free(q);
 }
 
 void
@@ -130,6 +154,90 @@ print_bss(char *s, uint8_t *buf, int length)
 		printf("\n");
 
 	printf("\n");
+}
+
+#define N 48
+
+void
+sign(char *certfile1, char *certfile2, char *keyfile)
+{
+	int err, i, m, n;
+	struct certinfo *p, *q, *r;
+	struct keyinfo *key;
+
+	p = read_certificate(certfile1);
+
+	if (p == NULL) {
+		fprintf(stderr, "error reading certificate %s\n", certfile1);
+		return;
+	}
+
+	err = parse_certificate(p);
+
+	if (err) {
+		fprintf(stderr, "error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile1, p->line);
+		return;
+	}
+
+	q = read_certificate(certfile2);
+
+	if (q == NULL) {
+		fprintf(stderr, "error reading certificate %s\n", certfile2);
+		return;
+	}
+
+	err = parse_certificate(q);
+
+	if (err) {
+		fprintf(stderr, "error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile2, p->line);
+		return;
+	}
+
+	key = read_key_file(keyfile);
+
+	if (key == NULL) {
+		fprintf(stderr, "error reading key %s\n", keyfile);
+		return;
+	}
+
+	err = parse_key_data(key);
+
+	if (err < 0) {
+		fprintf(stderr, "error parsing key %s (see parse_key_data.c, line %d)\n", keyfile, p->line);
+		return;
+	}
+
+	if (key->key_type != RSA_ENCRYPTION) {
+		fprintf(stderr, "unsupported key type\n");
+		return;
+	}
+
+	r = sign_certificate(p, q, key);
+
+	if (r == NULL) {
+		free(r);
+		fprintf(stderr, "failed\n");
+		return;
+	}
+
+	printf("-----BEGIN CERTIFICATE-----\n");
+
+	n = r->cert_length / N;
+	m = r->cert_length % N;
+
+	for (i = 0; i < n; i++) {
+		base64_print(stdout, r->cert_data + N * i, N);
+		printf("\n");
+	}
+
+	if (m) {
+		base64_print(stdout, r->cert_data + N * n, m);
+		printf("\n");
+	}
+
+	printf("-----END CERTIFICATE-----\n");
+
+	free(r);
 }
 
 void

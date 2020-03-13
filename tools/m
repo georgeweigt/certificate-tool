@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# make a.pem and b.pem
+
+openssl genrsa -out key.pem 1024
+openssl req -new -key key.pem -out csr.pem -subj "/O=alpha/CN=alpha"
+openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out a.pem -sha256
+
+openssl genrsa -out key.pem 2048
+openssl req -new -key key.pem -out csr.pem -subj "/O=beta/CN=beta"
+openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out b.pem -sha1
+
+rm csr.pem

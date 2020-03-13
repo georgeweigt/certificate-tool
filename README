@@ -8,13 +8,17 @@ To build and run:
 	make
 	./ctool
 
-To check a self-signed certificate's signature:
+To check that certificate A is signed by B:
 
-	./ctool check cert.pem
+	./ctool check A.pem B.pem
 
 To print a private key:
 
 	./ctool key key.pem
+
+To sign certificate A with B and save as C (only RSA supported):
+
+	./ctool sign A.pem B.pem key.pem >C.pem
 
 There are scripts in the tools directory for creating certificates.
 

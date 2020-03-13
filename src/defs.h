@@ -161,6 +161,6 @@ struct point {
 	uint32_t *x, *y, *z;
 };
 
-#define Trace printf("%s %d\n", __FUNCTION__, __LINE__);
+#define Trace fprintf(stderr, "%s %d\n", __FUNCTION__, __LINE__);
 
 #include "prototypes.h"

@@ -52,18 +52,18 @@ rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 }
 
 void
-rsa_decrypt(uint8_t *buf, int len, struct keyinfo *ki)
+rsa_decrypt(uint8_t *buf, int len, struct keyinfo *key)
 {
 	int i;
-	uint32_t *a, *b, *c, *d, *e1, *e2, *h, *m1, *m2, *p, *q, *qinv, *t;
+	uint32_t *a, *b, *c, *d, *e1, *e2, *h, *m1, *m2, n, *p, *q, *qinv, *t;
 
-	p = buf_to_int(ki->key_data + ki->prime1_offset, ki->prime1_length);
-	q = buf_to_int(ki->key_data + ki->prime2_offset, ki->prime2_length);
+	p = buf_to_int(key->key_data + key->prime1_offset, key->prime1_length);
+	q = buf_to_int(key->key_data + key->prime2_offset, key->prime2_length);
 
-	e1 = buf_to_int(ki->key_data + ki->exponent1_offset, ki->exponent1_length);
-	e2 = buf_to_int(ki->key_data + ki->exponent2_offset, ki->exponent2_length);
+	e1 = buf_to_int(key->key_data + key->exponent1_offset, key->exponent1_length);
+	e2 = buf_to_int(key->key_data + key->exponent2_offset, key->exponent2_length);
 
-	qinv = buf_to_int(ki->key_data + ki->coefficient_offset, ki->coefficient_length);
+	qinv = buf_to_int(key->key_data + key->coefficient_offset, key->coefficient_length);
 
 	c = buf_to_int(buf, len);
 
@@ -77,24 +77,22 @@ rsa_decrypt(uint8_t *buf, int len, struct keyinfo *ki)
 	}
 
 	d = msub(m1, m2);
-
 	h = mmul(qinv, d);
-
 	mmod(h, p);
-
 	b = mmul(h, q);
-
 	a = madd(m2, b);
+
+	n = MLENGTH(a); // number of uint32_t in result
 
 	memset(buf, 0, len);
 
-	for (i = 0; i < a[-1]; i++) {
-		if (len - 4 * i - 4 < 0)
-			break; // buffer overrun
-		buf[len - 4 * i - 4] = a[i] >> 24;
-		buf[len - 4 * i - 3] = a[i] >> 16;
-		buf[len - 4 * i - 2] = a[i] >> 8;
-		buf[len - 4 * i - 1] = a[i];
+	if (4 * n <= len) {
+		for (i = 0; i < n; i++) {
+			buf[len - 4 * i - 4] = a[i] >> 24;
+			buf[len - 4 * i - 3] = a[i] >> 16;
+			buf[len - 4 * i - 2] = a[i] >> 8;
+			buf[len - 4 * i - 1] = a[i];
+		}
 	}
 
 	mfree(a);
@@ -539,18 +537,3 @@ str_to_int(char *s)
 	mnorm(a);
 	return a;
 }
-
-#if 0
-void
-print_rsa_keys(struct keyinfo *ki)
-{
-	print_buf("modulus", ki->key_data + ki->modulus_offset, ki->modulus_length);
-	print_buf("public_exponent", ki->key_data + ki->public_exponent_offset, ki->public_exponent_length);
-	print_buf("private_exponent", ki->key_data + ki->private_exponent_offset, ki->private_exponent_length);
-	print_buf("prime1", ki->key_data + ki->prime1_offset, ki->prime1_length);
-	print_buf("prime2", ki->key_data + ki->prime2_offset, ki->prime2_length);
-	print_buf("exponent1", ki->key_data + ki->exponent1_offset, ki->exponent1_length);
-	print_buf("exponent2", ki->key_data + ki->exponent2_offset, ki->exponent2_length);
-	print_buf("coefficient", ki->key_data + ki->coefficient_offset, ki->coefficient_length);
-}
-#endif
