@@ -133,7 +133,11 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 		return NULL;
 	}
 
+	// copy the plaintext signature
+
 	memcpy(r->cert_data + r->signature_offset, sig, r->signature_length);
+
+	// encrypt signature (RSA decrypt procedure is used to encrypt signature)
 
 	rsa_decrypt(r->cert_data + r->signature_offset, r->signature_length, key);
 
