@@ -172,6 +172,8 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 #define OID_ECDSA_WITH_SHA384 "\x06\x08\x2a\x86\x48\xce\x3d\x04\x03\x03"
 #define OID_ECDSA_WITH_SHA512 "\x06\x08\x2a\x86\x48\xce\x3d\x04\x03\x04"
 
+// new signature algorithm is a merge of original algorithm and key
+
 int
 sign_signature_algorithm(uint8_t *buf, struct certinfo *p, struct keyinfo *key)
 {
