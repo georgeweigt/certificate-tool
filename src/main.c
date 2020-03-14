@@ -26,6 +26,8 @@ main(int argc, char *argv[])
 		return 0;
 	}
 
+	printf("what?\n");
+
 	return 1;
 }
 
@@ -69,7 +71,7 @@ key(char *filename)
 		return;
 
 	if (key->key_type == 0) {
-		fprintf(stderr, "unsupported key type\n");
+		printf("unsupported key type\n");
 		free(key);
 		return;
 	}
@@ -164,7 +166,7 @@ sign(char *filename1, char *filename2, char *filename3)
 	r = sign_certificate(p, q, key);
 
 	if (r == NULL) {
-		fprintf(stderr, "fail\n");
+		printf("fail\n");
 		free(p);
 		free(q);
 		free(key);
@@ -203,14 +205,14 @@ get_cert(char *filename)
 	p = read_certificate(filename);
 
 	if (p == NULL) {
-		fprintf(stderr, "error reading certificate %s\n", filename);
+		printf("error reading certificate %s\n", filename);
 		return NULL;
 	}
 
 	err = parse_certificate(p);
 
 	if (err) {
-		fprintf(stderr, "error parsing certificate %s (see parse_certificate.c, line %d)\n", filename, p->line);
+		printf("error parsing certificate %s (see parse_certificate.c, line %d)\n", filename, p->line);
 		free(p);
 		return NULL;
 	}
@@ -227,14 +229,14 @@ get_key(char *filename)
 	key = read_key_file(filename);
 
 	if (key == NULL) {
-		fprintf(stderr, "error reading key %s\n", filename);
+		printf("error reading key %s\n", filename);
 		return NULL;
 	}
 
 	err = parse_key_data(key);
 
 	if (err) {
-		fprintf(stderr, "error parsing key %s (see parse_key_data.c, line %d)\n", filename, key->line);
+		printf("error parsing key %s (see parse_key_data.c, line %d)\n", filename, key->line);
 		free(key);
 		return NULL;
 	}
@@ -245,6 +247,6 @@ get_key(char *filename)
 void
 malloc_kaput(void)
 {
-	fprintf(stderr, "malloc kaput\n");
+	printf("malloc kaput\n");
 	exit(1);
 }
