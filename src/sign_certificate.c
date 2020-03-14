@@ -219,8 +219,7 @@ sign_signature_algorithm(uint8_t *buf, struct certinfo *p, struct keyinfo *key)
 			return 15;
 
 		default:
-			fprintf(stderr, "missing case label in %s, line %d\n", __func__, __LINE__);
-			exit(1);
+			break;
 		}
 		break;
 
@@ -266,14 +265,12 @@ sign_signature_algorithm(uint8_t *buf, struct certinfo *p, struct keyinfo *key)
 			return 12;
 
 		default:
-			fprintf(stderr, "missing case label in %s, line %d\n", __func__, __LINE__);
-			exit(1);
+			break;
 		}
 		break;
 
 	default:
-		fprintf(stderr, "missing case label in %s, line %d\n", __func__, __LINE__);
-		exit(1);
+		break;
 	}
 
 	return 0;
@@ -361,8 +358,7 @@ sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 		break;
 
 	default:
-		fprintf(stderr, "missing case label in %s, line %d\n", __func__, __LINE__);
-		exit(1);
+		return;
 	}
 
 	len = ecdsa256_sign_cert(r, key, hash, len);
