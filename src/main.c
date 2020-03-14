@@ -30,36 +30,20 @@ main(int argc, char *argv[])
 }
 
 void
-check(char *certfile1, char *certfile2)
+check(char *filename1, char *filename2)
 {
 	int err;
-	struct certinfo *p = NULL, *q = NULL;
+	struct certinfo *p, *q;
 
-	p = read_certificate(certfile1);
+	p = get_cert(filename1);
 
-	if (p == NULL) {
-		printf("error reading certificate %s\n", certfile1);
-		goto done;
-	}
+	if (p == NULL)
+		return;
 
-	err = parse_certificate(p);
-
-	if (err) {
-		printf("error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile1, p->line);
-		goto done;
-	}
-
-	q = read_certificate(certfile2);
+	q = get_cert(filename2);
 
 	if (q == NULL) {
-		printf("error reading certificate %s\n", certfile2);
-		goto done;
-	}
-
-	err = parse_certificate(q);
-
-	if (err) {
-		printf("error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile2, q->line);
+		free(p);
 		return;
 	}
 
@@ -70,43 +54,29 @@ check(char *certfile1, char *certfile2)
 	else
 		printf("no\n");
 
-done:
-	if (p)
-		free(p);
-	if (q)
-		free(q);
+	free(p);
+	free(q);
 }
 
 void
 key(char *filename)
 {
-	int err;
-	struct keyinfo *key = NULL;
+	struct keyinfo *key;
 
-	key = read_key_file(filename);
+	key = get_key(filename);
 
-	if (key == NULL) {
-		printf("error reading key file\n");
-		goto done;
-	}
-
-	err = parse_key_data(key);
-
-	if (err < 0) {
-		printf("error parsing key data (see parse_key_data.c, line %d)\n", key->line);
-		goto done;
-	}
+	if (key == NULL)
+		return;
 
 	if (key->key_type == 0) {
-		printf("unsupported key type\n");
-		goto done;
+		fprintf(stderr, "unsupported key type\n");
+		free(key);
+		return;
 	}
 
 	print_key_data(key);
 
-done:
-	if (key)
-		free(key);
+	free(key);
 }
 
 void
@@ -126,11 +96,13 @@ print_key_data(struct keyinfo *p)
 		break;
 
 	case PRIME256V1:
-		print_bss("prime256v1", p->key_data + p->ec_private_key_offset, p->ec_private_key_length);
+		print_bss("prime256v1 private key", p->key_data + p->ec_private_key_offset, p->ec_private_key_length);
+		print_bss("prime256v1 public key", p->key_data + p->ec_public_key_offset, p->ec_public_key_length);
 		break;
 
 	case SECP384R1:
-		print_bss("secp384r1", p->key_data + p->ec_private_key_offset, p->ec_private_key_length);
+		print_bss("secp384r1 private key", p->key_data + p->ec_private_key_offset, p->ec_private_key_length);
+		print_bss("secp384r1 public key", p->key_data + p->ec_public_key_offset, p->ec_public_key_length);
 		break;
 	}
 }
@@ -163,64 +135,40 @@ print_bss(char *s, uint8_t *buf, int length)
 #define N 48
 
 void
-sign(char *certfile1, char *certfile2, char *keyfile)
+sign(char *filename1, char *filename2, char *filename3)
 {
-	int err, i, m, n;
-	struct certinfo *p = NULL, *q = NULL, *r = NULL;
-	struct keyinfo *key = NULL;
+	int i, m, n;
+	struct certinfo *p, *q, *r;
+	struct keyinfo *key;
 
-	p = read_certificate(certfile1);
+	p = get_cert(filename1);
 
-	if (p == NULL) {
-		fprintf(stderr, "error reading certificate %s\n", certfile1);
-		goto done;
-	}
+	if (p == NULL)
+		return;
 
-	err = parse_certificate(p);
-
-	if (err) {
-		fprintf(stderr, "error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile1, p->line);
-		goto done;
-	}
-
-	q = read_certificate(certfile2);
+	q = get_cert(filename2);
 
 	if (q == NULL) {
-		fprintf(stderr, "error reading certificate %s\n", certfile2);
-		goto done;
+		free(p);
+		return;
 	}
 
-	err = parse_certificate(q);
-
-	if (err) {
-		fprintf(stderr, "error parsing certificate %s (see parse_certificate.c, line %d)\n", certfile2, p->line);
-		goto done;
-	}
-
-	key = read_key_file(keyfile);
+	key = get_key(filename3);
 
 	if (key == NULL) {
-		fprintf(stderr, "error reading key %s\n", keyfile);
-		goto done;
-	}
-
-	err = parse_key_data(key);
-
-	if (err < 0) {
-		fprintf(stderr, "error parsing key %s (see parse_key_data.c, line %d)\n", keyfile, p->line);
-		goto done;
-	}
-
-	if (key->key_type != RSA_ENCRYPTION) {
-		fprintf(stderr, "unsupported key type\n");
-		goto done;
+		free(p);
+		free(q);
+		return;
 	}
 
 	r = sign_certificate(p, q, key);
 
 	if (r == NULL) {
-		fprintf(stderr, "failed\n");
-		goto done;
+		fprintf(stderr, "fail\n");
+		free(p);
+		free(q);
+		free(key);
+		return;
 	}
 
 	printf("-----BEGIN CERTIFICATE-----\n");
@@ -240,15 +188,58 @@ sign(char *certfile1, char *certfile2, char *keyfile)
 
 	printf("-----END CERTIFICATE-----\n");
 
-done:
-	if (p)
+	free(p);
+	free(q);
+	free(r);
+	free(key);
+}
+
+struct certinfo *
+get_cert(char *filename)
+{
+	int err;
+	struct certinfo *p;
+
+	p = read_certificate(filename);
+
+	if (p == NULL) {
+		fprintf(stderr, "error reading certificate %s\n", filename);
+		return NULL;
+	}
+
+	err = parse_certificate(p);
+
+	if (err) {
+		fprintf(stderr, "error parsing certificate %s (see parse_certificate.c, line %d)\n", filename, p->line);
 		free(p);
-	if (q)
-		free(q);
-	if (r)
-		free(r);
-	if (key)
+		return NULL;
+	}
+
+	return p;
+}
+
+struct keyinfo *
+get_key(char *filename)
+{
+	int err;
+	struct keyinfo *key;
+
+	key = read_key_file(filename);
+
+	if (key == NULL) {
+		fprintf(stderr, "error reading key %s\n", filename);
+		return NULL;
+	}
+
+	err = parse_key_data(key);
+
+	if (err) {
+		fprintf(stderr, "error parsing key %s (see parse_key_data.c, line %d)\n", filename, key->line);
 		free(key);
+		return NULL;
+	}
+
+	return key;
 }
 
 void

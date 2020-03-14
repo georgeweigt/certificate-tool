@@ -196,6 +196,9 @@ parse_ec_key_data(struct keyinfo *p)
 		return -1;
 	}
 
+	p->ec_private_key_offset = offset;
+	p->ec_private_key_length = length;
+
 	offset += length;
 
 	// [0] { OID }
@@ -244,8 +247,8 @@ parse_ec_key_data(struct keyinfo *p)
 		return -1;
 	}
 
-	p->ec_private_key_offset = offset + 1; // skip over remainder byte
-	p->ec_private_key_length = length - 1;
+	p->ec_public_key_offset = offset + 1; // skip over remainder byte
+	p->ec_public_key_length = length - 1;
 
 	offset += length;
 

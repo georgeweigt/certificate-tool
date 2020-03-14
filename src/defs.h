@@ -75,6 +75,9 @@ struct keyinfo {
 	int ec_private_key_offset;
 	int ec_private_key_length;
 
+	int ec_public_key_offset;
+	int ec_public_key_length;
+
 	// key data
 
 	int key_data_length;

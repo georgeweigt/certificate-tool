@@ -161,14 +161,68 @@ ecdsa256_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t
 	return err;
 }
 
-/* All arguments are bignums
+// returns overall length of signature (including BIT STRING encapsulation header)
 
-	h	hash of certificate
+int
+ecdsa256_sign_cert(struct certinfo *p, struct keyinfo *key, uint8_t *hash, int len)
+{
+	int k;
+	uint8_t *buf, sig[64];
+	uint32_t *d, *h;
 
-	d	private key
+	h = ec_buf_to_bignum(hash, len);
+	d = ec_buf_to_bignum(key->key_data + key->ec_private_key_offset, key->ec_private_key_length);
 
-	sig	pointer to 64-byte buffer
-*/
+	ecdsa256_sign_nib(h, d, sig);
+
+	ec_free(h);
+	ec_free(d);
+
+	// encode
+
+	buf = p->cert_data + p->signature_algorithm_offset + p->signature_algorithm_length;
+
+	k = 5;
+
+	buf[k++] = INTEGER;
+
+	if (sig[0] & 0x80) {
+		buf[k++] = 33; // length
+		buf[k++] = 0;
+	} else
+		buf[k++] = 32; // length
+
+	memcpy(buf + k, sig, 32);
+
+	k += 32;
+
+	buf[k++] = INTEGER;
+
+	if (sig[32] & 0x80) {
+		buf[k++] = 33; // length
+		buf[k++] = 0;
+	} else
+		buf[k++] = 32; // length
+
+	memcpy(buf + k, sig + 32, 32);
+
+	k += 32;
+
+	buf[0] = BIT_STRING;
+	buf[1] = k - 2; // length
+	buf[2] = 0; // remainder byte
+
+	buf[3] = SEQUENCE;
+	buf[4] = k - 5; // length
+
+	return k;
+}
+
+//	h	bignum hash of certificate
+//
+//	d	bignum private key
+//
+//	sig	pointer to 64 byte buffer
 
 void
 ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
@@ -430,14 +484,11 @@ ecdsa384_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t
 	return err;
 }
 
-/* All arguments are bignums
-
-	h	hash of certificate
-
-	d	private key
-
-	sig	pointer to 96-byte buffer
-*/
+//	h	bignum hash of certificate
+//
+//	d	bignum private key
+//
+//	sig	pointer to 96-byte buffer
 
 void
 ecdsa384_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)

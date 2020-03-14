@@ -16,9 +16,9 @@ Print a private key:
 
 	./ctool key key.pem
 
-Sign certificate A with B and save as C (RSA only):
+Sign certificate A with B and save as C:
 
-	./ctool sign A.pem B.pem key.pem >C.pem
+	./ctool sign A.pem B.pem key.pem | tee C.pem
 
 There are scripts in the tools directory for creating certificates.
 
