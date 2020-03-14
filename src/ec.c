@@ -164,11 +164,11 @@ ecdsa256_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t
 // returns 64 byte signature in sig
 
 void
-ecdsa256_signature(struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
+ecdsa256_signature(struct keyinfo *key, uint8_t *hash, int hash_len, uint8_t *sig)
 {
 	uint32_t *d, *h;
 
-	h = ec_buf_to_bignum(hash, len);
+	h = ec_buf_to_bignum(hash, hash_len);
 	d = ec_buf_to_bignum(key->key_data + key->ec_private_key_offset, key->ec_private_key_length);
 
 	ecdsa256_sign_nib(h, d, sig);
@@ -180,7 +180,7 @@ ecdsa256_signature(struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
 void
 ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 {
-	int i;
+	int i, n;
 	uint32_t *k, *r, *s, *t;
 	struct point G, R;
 
@@ -259,18 +259,26 @@ ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 
 	memset(sig, 0, 64);
 
-	for (i = 0; i < len(r); i++) {
-		sig[32 - 4 * i - 4] = r[i] >> 24;
-		sig[32 - 4 * i - 3] = r[i] >> 16;
-		sig[32 - 4 * i - 2] = r[i] >> 8;
-		sig[32 - 4 * i - 1] = r[i];
+	n = len(r); // number of uint32_t
+
+	if (n <= 8) {
+		for (i = 0; i < n; i++) {
+			sig[32 - 4 * i - 4] = r[i] >> 24;
+			sig[32 - 4 * i - 3] = r[i] >> 16;
+			sig[32 - 4 * i - 2] = r[i] >> 8;
+			sig[32 - 4 * i - 1] = r[i];
+		}
 	}
 
-	for (i = 0; i < len(s); i++) {
-		sig[64 - 4 * i - 4] = s[i] >> 24;
-		sig[64 - 4 * i - 3] = s[i] >> 16;
-		sig[64 - 4 * i - 2] = s[i] >> 8;
-		sig[64 - 4 * i - 1] = s[i];
+	n = len(s); // number of uint32_t
+
+	if (n <= 8) {
+		for (i = 0; i < n; i++) {
+			sig[64 - 4 * i - 4] = s[i] >> 24;
+			sig[64 - 4 * i - 3] = s[i] >> 16;
+			sig[64 - 4 * i - 2] = s[i] >> 8;
+			sig[64 - 4 * i - 1] = s[i];
+		}
 	}
 
 	ec_free(k);
@@ -440,11 +448,11 @@ ecdsa384_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t
 // returns 96 byte signature in sig
 
 void
-ecdsa384_signature(struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
+ecdsa384_signature(struct keyinfo *key, uint8_t *hash, int hash_len, uint8_t *sig)
 {
 	uint32_t *d, *h;
 
-	h = ec_buf_to_bignum(hash, len);
+	h = ec_buf_to_bignum(hash, hash_len);
 	d = ec_buf_to_bignum(key->key_data + key->ec_private_key_offset, key->ec_private_key_length);
 
 	ecdsa384_sign_nib(h, d, sig);
@@ -456,7 +464,7 @@ ecdsa384_signature(struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
 void
 ecdsa384_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 {
-	int i;
+	int i, n;
 	uint32_t *k, *r, *s, *t;
 	struct point G, R;
 
@@ -535,18 +543,26 @@ ecdsa384_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 
 	memset(sig, 0, 96);
 
-	for (i = 0; i < len(r); i++) {
-		sig[48 - 4 * i - 4] = r[i] >> 24;
-		sig[48 - 4 * i - 3] = r[i] >> 16;
-		sig[48 - 4 * i - 2] = r[i] >> 8;
-		sig[48 - 4 * i - 1] = r[i];
+	n = len(r); // number of uint32_t
+
+	if (n <= 12) {
+		for (i = 0; i < n; i++) {
+			sig[48 - 4 * i - 4] = r[i] >> 24;
+			sig[48 - 4 * i - 3] = r[i] >> 16;
+			sig[48 - 4 * i - 2] = r[i] >> 8;
+			sig[48 - 4 * i - 1] = r[i];
+		}
 	}
 
-	for (i = 0; i < len(s); i++) {
-		sig[96 - 4 * i - 4] = s[i] >> 24;
-		sig[96 - 4 * i - 3] = s[i] >> 16;
-		sig[96 - 4 * i - 2] = s[i] >> 8;
-		sig[96 - 4 * i - 1] = s[i];
+	n = len(s); // number of uint32_t
+
+	if (n <= 12) {
+		for (i = 0; i < n; i++) {
+			sig[96 - 4 * i - 4] = s[i] >> 24;
+			sig[96 - 4 * i - 3] = s[i] >> 16;
+			sig[96 - 4 * i - 2] = s[i] >> 8;
+			sig[96 - 4 * i - 1] = s[i];
+		}
 	}
 
 	ec_free(k);
