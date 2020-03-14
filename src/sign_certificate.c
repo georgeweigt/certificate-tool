@@ -6,7 +6,7 @@ struct certinfo *
 sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 {
 	int err, i, j, k, n;
-	uint8_t *buf, *sig = NULL;
+	uint8_t *buf;
 	struct certinfo *r;
 
 	// adjust length for changed issuer and signature
@@ -101,6 +101,30 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 		return NULL;
 	}
 
+	switch (key->key_type) {
+
+	case RSA_ENCRYPTION:
+		err = sign_rsa(r, key);
+		if (err) {
+			free(r);
+			r = NULL;
+		}
+		break;
+
+	default:
+		free(r);
+		r = NULL;
+		break;
+	}
+
+	return r;
+}
+
+int
+sign_rsa(struct certinfo *r, struct keyinfo *key)
+{
+	uint8_t *sig = NULL;
+
 	switch (r->signature_algorithm) {
 
 	case MD5_WITH_RSA_ENCRYPTION:
@@ -128,20 +152,18 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 		break;
 	}
 
-	if (sig == NULL) {
-		free(r);
-		return NULL;
-	}
+	if (sig == NULL)
+		return -1;
 
-	// copy the plaintext signature
+	// copy signature
 
 	memcpy(r->cert_data + r->signature_offset, sig, r->signature_length);
+
+	free(sig);
 
 	// encrypt signature (RSA decrypt procedure is used to encrypt signature)
 
 	rsa_decrypt(r->cert_data + r->signature_offset, r->signature_length, key);
 
-	free(sig);
-
-	return r;
+	return 0;
 }

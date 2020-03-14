@@ -126,3 +126,4 @@ void sha512(uint8_t *buf, int len, uint8_t *out);
 void sha512_with_key(uint8_t *key, uint8_t *buf, int len, uint8_t *out);
 void sha512_hash_block(uint8_t *buf, uint64_t *hash);
 struct certinfo * sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key);
+int sign_rsa(struct certinfo *r, struct keyinfo *key);
