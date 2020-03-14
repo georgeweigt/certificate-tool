@@ -44,7 +44,8 @@ Supported hash algorithms:
 	SHA384
 	SHA512
 
-% wc -l *.c
+Lines per file:
+
      129 base64.c
       87 check_signature.c
     2455 ec.c
