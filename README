@@ -26,9 +26,8 @@ Example:
 
 	cd tools
 	./m2
-	cd ../src
-	./ctool sign ../tools/a.pem ../tools/b.pem ../tools/key.pem | tee ../tools/c.pem
-	./ctool check ../tools/c.pem ../tools/b.pem
+	../src/ctool sign a.pem b.pem key.pem | tee c.pem
+	../src/ctool check c.pem b.pem
 
 
 
