@@ -101,16 +101,16 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 	case SECP384R1:
 		// write a dummy signature for parser
 		buf[k++] = BIT_STRING;
-		buf[k++] = 9;
+		buf[k++] = 9; // length
 		buf[k++] = 0; // remainder byte
 		buf[k++] = SEQUENCE;
-		buf[k++] = 6;
+		buf[k++] = 6; // length
 		buf[k++] = INTEGER;
-		buf[k++] = 1;
-		buf[k++] = 0;
+		buf[k++] = 1; // length
+		buf[k++] = 0; // value
 		buf[k++] = INTEGER;
-		buf[k++] = 1;
-		buf[k++] = 0;
+		buf[k++] = 1; // length
+		buf[k++] = 0; // value
 		break;
 
 	default:
