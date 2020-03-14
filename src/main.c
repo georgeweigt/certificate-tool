@@ -5,23 +5,17 @@ main(int argc, char *argv[])
 {
 	ec_init();
 
-	if (strcmp(argv[1], "check") == 0) {
-		if (argc < 4)
-			return 1;
+	if (argc == 4 && strcmp(argv[1], "check") == 0) {
 		check(argv[2], argv[3]);
 		return 0;
 	}
 
-	if (strcmp(argv[1], "key") == 0) {
-		if (argc < 3)
-			return 1;
+	if (argc == 3 && strcmp(argv[1], "key") == 0) {
 		key(argv[2]);
 		return 0;
 	}
 
-	if (strcmp(argv[1], "sign") == 0) {
-		if (argc < 5)
-			return 1;
+	if (argc == 5 && strcmp(argv[1], "sign") == 0) {
 		sign(argv[2], argv[3], argv[4]);
 		return 0;
 	}
