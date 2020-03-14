@@ -44,7 +44,7 @@ Supported hash algorithms:
 	SHA384
 	SHA512
 
-Lines per file:
+Lines per C file:
 
      129 base64.c
       87 check_signature.c
