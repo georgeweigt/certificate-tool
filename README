@@ -22,6 +22,16 @@ Sign certificate A with B and save as C:
 
 There are scripts in the tools directory for creating certificates.
 
+Example:
+
+	cd tools
+	./m2
+	cd ../src
+	./ctool sign ../tools/a.pem ../tools/b.pem ../tools/key.pem | tee ../tools/c.pem
+	./ctool check ../tools/c.pem ../tools/b.pem
+
+
+
 Supported public key algorithms:
 
 	RSA
