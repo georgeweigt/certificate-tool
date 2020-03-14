@@ -1,5 +1,7 @@
 #include "defs.h"
 
+// generate pkcs signatures
+
 uint8_t *
 pkcs_md5_signature(struct certinfo *p)
 {
