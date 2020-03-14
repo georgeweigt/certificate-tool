@@ -17,6 +17,7 @@ void ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig);
 int ecdsa384_verify(struct certinfo *p, struct certinfo *q);
 int ecdhe384_verify_hash(uint8_t *hash, int hashlen, uint8_t *rr, int r_length, uint8_t *ss, int s_length, uint8_t *xx, uint8_t *yy);
 int ecdsa384_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t *y);
+int ecdsa384_sign_cert(struct certinfo *p, struct keyinfo *key, uint8_t *hash, int len);
 void ecdsa384_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig);
 void ec_init();
 uint32_t * ec_modinv(uint32_t *c, uint32_t *p);
@@ -132,3 +133,4 @@ struct certinfo * sign_certificate(struct certinfo *p, struct certinfo *q, struc
 int sign_signature_algorithm(uint8_t *buf, struct certinfo *p, struct keyinfo *key);
 void sign_rsa(struct certinfo *r, struct keyinfo *key);
 void sign_prime256v1(struct certinfo *r, struct keyinfo *key);
+void sign_secp384r1(struct certinfo *r, struct keyinfo *key);
