@@ -20,7 +20,7 @@ Sign certificate A with B and save as C:
 
 	./ctool sign A.pem B.pem key.pem | tee C.pem
 
-There are scripts in the tools directory for creating certificates.
+There are scripts in the tools directory for creating certificate files.
 
 Example:
 
