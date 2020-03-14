@@ -29,8 +29,6 @@ Example:
 	../src/ctool sign a.pem b.pem key.pem | tee c.pem
 	../src/ctool check c.pem b.pem
 
-
-
 Supported public key algorithms:
 
 	RSA
@@ -45,3 +43,22 @@ Supported hash algorithms:
 	SHA256
 	SHA384
 	SHA512
+
+% wc -l *.c
+     129 base64.c
+      87 check_signature.c
+    2455 ec.c
+     246 main.c
+     231 md5.c
+     772 parse_certificate.c
+     275 parse_key_data.c
+     221 pkcs.c
+      85 read_certificate.c
+     196 read_key_file.c
+     539 rsa.c
+     236 sha1.c
+     230 sha224.c
+     230 sha256.c
+     250 sha384.c
+     250 sha512.c
+     509 sign_certificate.c
