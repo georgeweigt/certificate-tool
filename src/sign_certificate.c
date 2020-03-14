@@ -21,7 +21,7 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 
 	case PRIME256V1:
 	case SECP384R1:
-		n = n - p->signature_length + 2 * key->ec_private_key_length;
+		n = n - p->signature_length + key->ec_public_key_length;
 		break;
 
 	default:
@@ -369,7 +369,7 @@ sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 
 	ecdsa256_signature(key, hash, len, sig);
 
-	buf = r->cert_data + r->signature_algorithm_offset + r->signature_algorithm_length;
+	buf = r->cert_data + r->signature_start;
 
 	k = 5;
 
@@ -408,7 +408,7 @@ sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 
 	r->signature_length = k - 3; // subtract 3 for BIT STRING header
 
-	r->cert_length = r->signature_algorithm_offset + r->signature_algorithm_length + k;
+	r->cert_length = r->signature_start + k;
 
 	r->top_length = r->cert_length - 4;
 
@@ -459,7 +459,7 @@ sign_secp384r1(struct certinfo *r, struct keyinfo *key)
 
 	ecdsa384_signature(key, hash, len, sig);
 
-	buf = r->cert_data + r->signature_algorithm_offset + r->signature_algorithm_length;
+	buf = r->cert_data + r->signature_start;
 
 	k = 5;
 
@@ -498,7 +498,7 @@ sign_secp384r1(struct certinfo *r, struct keyinfo *key)
 
 	r->signature_length = k - 3; // subtract 3 for BIT STRING header
 
-	r->cert_length = r->signature_algorithm_offset + r->signature_algorithm_length + k;
+	r->cert_length = r->signature_start + k;
 
 	r->top_length = r->cert_length - 4;
 

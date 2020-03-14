@@ -173,6 +173,7 @@ parse_cert_level_2(struct certinfo *p, uint8_t *cert, int offset, int end)
 
 	// signature
 
+	p->signature_start = offset;
 	err = get_type_and_length(cert, end, &offset, &type, &length);
 	if (err || type != BIT_STRING || length < 2) {
 		p->line = __LINE__;

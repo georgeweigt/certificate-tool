@@ -122,6 +122,7 @@ struct certinfo {
 	int signature_algorithm_offset;
 	int signature_algorithm_length;
 
+	int signature_start;
 	int signature_offset;
 	int signature_length;
 
