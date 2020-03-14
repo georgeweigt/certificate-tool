@@ -331,8 +331,8 @@ sign_rsa(struct certinfo *r, struct keyinfo *key)
 void
 sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 {
-	int len;
-	uint8_t hash[64];
+	int k, len;
+	uint8_t *buf, hash[64], sig[64];
 
 	len = r->info_offset + r->info_length - r->top_offset;
 
@@ -367,13 +367,48 @@ sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 		return;
 	}
 
-	len = ecdsa256_sign_cert(r, key, hash, len);
+	ecdsa256_signature(key, hash, len, sig);
+
+	buf = r->cert_data + r->signature_algorithm_offset + r->signature_algorithm_length;
+
+	k = 5;
+
+	buf[k++] = INTEGER;
+
+	if (sig[0] & 0x80) {
+		buf[k++] = 33; // length
+		buf[k++] = 0;
+	} else
+		buf[k++] = 32; // length
+
+	memcpy(buf + k, sig, 32);
+
+	k += 32;
+
+	buf[k++] = INTEGER;
+
+	if (sig[32] & 0x80) {
+		buf[k++] = 33; // length
+		buf[k++] = 0;
+	} else
+		buf[k++] = 32; // length
+
+	memcpy(buf + k, sig + 32, 32);
+
+	k += 32;
+
+	buf[0] = BIT_STRING;
+	buf[1] = k - 2; // length
+	buf[2] = 0; // remainder byte
+
+	buf[3] = SEQUENCE;
+	buf[4] = k - 5; // length
 
 	// fix up length
 
-	r->signature_length = len - 3; // subtract 3 for BIT STRING header
+	r->signature_length = k - 3; // subtract 3 for BIT STRING header
 
-	r->cert_length = r->signature_algorithm_offset + r->signature_algorithm_length + len;
+	r->cert_length = r->signature_algorithm_offset + r->signature_algorithm_length + k;
 
 	r->top_length = r->cert_length - 4;
 
@@ -386,8 +421,8 @@ sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 void
 sign_secp384r1(struct certinfo *r, struct keyinfo *key)
 {
-	int len;
-	uint8_t hash[64];
+	int k, len;
+	uint8_t *buf, hash[64], sig[96];
 
 	len = r->info_offset + r->info_length - r->top_offset;
 
@@ -422,13 +457,48 @@ sign_secp384r1(struct certinfo *r, struct keyinfo *key)
 		return;
 	}
 
-	len = ecdsa384_sign_cert(r, key, hash, len);
+	ecdsa384_signature(key, hash, len, sig);
+
+	buf = r->cert_data + r->signature_algorithm_offset + r->signature_algorithm_length;
+
+	k = 5;
+
+	buf[k++] = INTEGER;
+
+	if (sig[0] & 0x80) {
+		buf[k++] = 49; // length
+		buf[k++] = 0;
+	} else
+		buf[k++] = 48; // length
+
+	memcpy(buf + k, sig, 48);
+
+	k += 48;
+
+	buf[k++] = INTEGER;
+
+	if (sig[48] & 0x80) {
+		buf[k++] = 49; // length
+		buf[k++] = 0;
+	} else
+		buf[k++] = 48; // length
+
+	memcpy(buf + k, sig + 48, 48);
+
+	k += 48;
+
+	buf[0] = BIT_STRING;
+	buf[1] = k - 2; // length
+	buf[2] = 0; // remainder byte
+
+	buf[3] = SEQUENCE;
+	buf[4] = k - 5; // length
 
 	// fix up length
 
-	r->signature_length = len - 3; // subtract 3 for BIT STRING header
+	r->signature_length = k - 3; // subtract 3 for BIT STRING header
 
-	r->cert_length = r->signature_algorithm_offset + r->signature_algorithm_length + len;
+	r->cert_length = r->signature_algorithm_offset + r->signature_algorithm_length + k;
 
 	r->top_length = r->cert_length - 4;
 
