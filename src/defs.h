@@ -95,15 +95,19 @@ struct certinfo {
 	int serial_number_offset;
 	int serial_number_length;
 
+	int algorithm_start;
 	int algorithm_offset;
 	int algorithm_length;
 
+	int issuer_start;
 	int issuer_offset;
 	int issuer_length;
 
+	int validity_start;
 	int validity_offset;
 	int validity_length;
 
+	int subject_start;
 	int subject_offset;
 	int subject_length;
 

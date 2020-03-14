@@ -41,30 +41,30 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 
 	k = 8;
 
-	// copy from p up to first signature algorithm oid
+	// copy from p up to algorithm
 
 	i = p->info_offset;
-	j = p->serial_number_offset + p->serial_number_length; // start of signature algorithm
+	j = p->algorithm_start;
 	n = j - i;
 	memcpy(buf + k, p->cert_data + i, n);
 	k += n;
 
-	// signature algorithm
+	// new signature algorithm
 
 	k += sign_signature_algorithm(buf + k, p, key);
 
-	// copy issuer from q
+	// q's subject field is new issuer
 
-	i = q->algorithm_offset + q->algorithm_length; // start of issuer
-	j = q->issuer_offset + q->issuer_length; // end of issuer
+	i = q->subject_start;
+	j = q->subject_offset + q->subject_length;
 	n = j - i;
 	memcpy(buf + k, q->cert_data + i, n);
 	k += n;
 
-	// copy from p up to signature algorithm
+	// copy the rest from p
 
-	i = p->issuer_offset + p->issuer_length; // start of validity
-	j = p->info_offset + p->info_length; // start of signature algorithm
+	i = p->validity_start;
+	j = p->info_offset + p->info_length;
 	n = j - i;
 	memcpy(buf + k, p->cert_data + i, n);
 	k += n;

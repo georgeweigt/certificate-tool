@@ -215,6 +215,7 @@ parse_cert_level_3(struct certinfo *p, uint8_t *cert, int offset, int end)
 
 	// certificate signature algorithm
 
+	p->algorithm_start = offset;
 	err = get_type_and_length(cert, end, &offset, &type, &length);
 	if (err || type != SEQUENCE) {
 		p->line = __LINE__;
@@ -226,6 +227,7 @@ parse_cert_level_3(struct certinfo *p, uint8_t *cert, int offset, int end)
 
 	// issuer
 
+	p->issuer_start = offset;
 	err = get_type_and_length(cert, end, &offset, &type, &length);
 	if (err || type != SEQUENCE) {
 		p->line = __LINE__;
@@ -237,6 +239,7 @@ parse_cert_level_3(struct certinfo *p, uint8_t *cert, int offset, int end)
 
 	// validity
 
+	p->validity_start = offset;
 	err = get_type_and_length(cert, end, &offset, &type, &length);
 	if (err || type != SEQUENCE) {
 		p->line = __LINE__;
@@ -248,6 +251,7 @@ parse_cert_level_3(struct certinfo *p, uint8_t *cert, int offset, int end)
 
 	// subject
 
+	p->subject_start = offset;
 	err = get_type_and_length(cert, end, &offset, &type, &length);
 	if (err || type != SEQUENCE) {
 		p->line = __LINE__;
