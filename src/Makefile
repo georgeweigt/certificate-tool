@@ -12,6 +12,7 @@ base64.o \
 check_signature.o \
 rsa.o \
 ec.o \
+pkcs.o \
 md5.o \
 sha1.o \
 sha224.o \

@@ -290,27 +290,27 @@ sign_rsa(struct certinfo *r, struct keyinfo *key)
 	switch (r->signature_algorithm) {
 
 	case MD5_WITH_RSA_ENCRYPTION:
-		sig = gen_pkcs_md5_signature(r);
+		sig = pkcs_md5_signature(r);
 		break;
 
 	case SHA1_WITH_RSA_ENCRYPTION:
-		sig = gen_pkcs_sha1_signature(r);
+		sig = pkcs_sha1_signature(r);
 		break;
 
 	case SHA224_WITH_RSA_ENCRYPTION:
-		sig = gen_pkcs_sha224_signature(r);
+		sig = pkcs_sha224_signature(r);
 		break;
 
 	case SHA256_WITH_RSA_ENCRYPTION:
-		sig = gen_pkcs_sha256_signature(r);
+		sig = pkcs_sha256_signature(r);
 		break;
 
 	case SHA384_WITH_RSA_ENCRYPTION:
-		sig = gen_pkcs_sha384_signature(r);
+		sig = pkcs_sha384_signature(r);
 		break;
 
 	case SHA512_WITH_RSA_ENCRYPTION:
-		sig = gen_pkcs_sha512_signature(r);
+		sig = pkcs_sha512_signature(r);
 		break;
 	}
 
