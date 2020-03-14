@@ -51,7 +51,7 @@ Lines per file:
     2455 ec.c
      246 main.c
      231 md5.c
-     772 parse_certificate.c
+     773 parse_certificate.c
      275 parse_key_data.c
      221 pkcs.c
       85 read_certificate.c
