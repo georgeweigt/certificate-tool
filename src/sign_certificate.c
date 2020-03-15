@@ -334,32 +334,33 @@ sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 	int k, len;
 	uint8_t *buf, hash[64], sig[64];
 
-	len = r->info_offset + r->info_length - r->top_offset;
+	buf = r->cert_data + r->info_start;
+	len = r->info_offset + r->info_length - r->info_start;
 
 	switch (r->signature_algorithm) {
 
 	case ECDSA_WITH_SHA1:
-		sha1(r->cert_data + r->top_offset, len, hash);
+		sha1(buf, len, hash);
 		len = 20;
 		break;
 
 	case ECDSA_WITH_SHA224:
-		sha224(r->cert_data + r->top_offset, len, hash);
+		sha224(buf, len, hash);
 		len = 28;
 		break;
 
 	case ECDSA_WITH_SHA256:
-		sha256(r->cert_data + r->top_offset, len, hash);
+		sha256(buf, len, hash);
 		len = 32;
 		break;
 
 	case ECDSA_WITH_SHA384:
-		sha384(r->cert_data + r->top_offset, len, hash);
+		sha384(buf, len, hash);
 		len = 32; // truncate 48 to 32
 		break;
 
 	case ECDSA_WITH_SHA512:
-		sha512(r->cert_data + r->top_offset, len, hash);
+		sha512(buf, len, hash);
 		len = 32; // truncate 64 to 32
 		break;
 
@@ -424,32 +425,33 @@ sign_secp384r1(struct certinfo *r, struct keyinfo *key)
 	int k, len;
 	uint8_t *buf, hash[64], sig[96];
 
-	len = r->info_offset + r->info_length - r->top_offset;
+	buf = r->cert_data + r->info_start;
+	len = r->info_offset + r->info_length - r->info_start;
 
 	switch (r->signature_algorithm) {
 
 	case ECDSA_WITH_SHA1:
-		sha1(r->cert_data + r->top_offset, len, hash);
+		sha1(buf, len, hash);
 		len = 20;
 		break;
 
 	case ECDSA_WITH_SHA224:
-		sha224(r->cert_data + r->top_offset, len, hash);
+		sha224(buf, len, hash);
 		len = 28;
 		break;
 
 	case ECDSA_WITH_SHA256:
-		sha256(r->cert_data + r->top_offset, len, hash);
+		sha256(buf, len, hash);
 		len = 32;
 		break;
 
 	case ECDSA_WITH_SHA384:
-		sha384(r->cert_data + r->top_offset, len, hash);
+		sha384(buf, len, hash);
 		len = 48;
 		break;
 
 	case ECDSA_WITH_SHA512:
-		sha512(r->cert_data + r->top_offset, len, hash);
+		sha512(buf, len, hash);
 		len = 48; // truncate 64 to 48
 		break;
 

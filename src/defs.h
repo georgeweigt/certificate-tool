@@ -89,6 +89,7 @@ struct certinfo {
 	int top_offset;
 	int top_length;
 
+	int info_start;
 	int info_offset;
 	int info_length;
 

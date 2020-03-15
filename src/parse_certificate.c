@@ -151,6 +151,7 @@ parse_cert_level_2(struct certinfo *p, uint8_t *cert, int offset, int end)
 
 	// certificate info
 
+	p->info_start = offset;
 	err = get_type_and_length(cert, end, &offset, &type, &length);
 	if (err || type != SEQUENCE) {
 		p->line = __LINE__;

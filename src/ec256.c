@@ -145,31 +145,34 @@ int
 ec256_verify(struct certinfo *p, struct certinfo *q)
 {
 	int err, len;
-	uint8_t hash[64];
+	uint8_t *buf, hash[64];
 	uint32_t *h, *r, *s, *x, *y;
 
 	if (q->ec_key_length != 65)
 		return -1;
 
+	buf = p->cert_data + p->info_start;
+	len = p->info_offset + p->info_length - p->info_start;
+
 	switch (p->signature_algorithm) {
 	case ECDSA_WITH_SHA1:
-		sha1(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		sha1(buf, len, hash);
 		len = 20;
 		break;
 	case ECDSA_WITH_SHA224:
-		sha224(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		sha224(buf, len, hash);
 		len = 28;
 		break;
 	case ECDSA_WITH_SHA256:
-		sha256(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		sha256(buf, len, hash);
 		len = 32;
 		break;
 	case ECDSA_WITH_SHA384:
-		sha384(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		sha384(buf, len, hash);
 		len = 32; // truncate 48 to 32
 		break;
 	case ECDSA_WITH_SHA512:
-		sha512(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, hash);
+		sha512(buf, len, hash);
 		len = 32; // truncate 64 to 32
 		break;
 	default:

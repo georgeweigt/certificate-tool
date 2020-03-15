@@ -6,7 +6,7 @@ uint8_t *
 pkcs_md5_signature(struct certinfo *p)
 {
 	int k, n;
-	uint8_t *buf;
+	uint8_t *buf, *d;
 
 	n = p->signature_length - 37; // 3 + 18 + 16 = 37
 
@@ -33,7 +33,10 @@ pkcs_md5_signature(struct certinfo *p)
 
 	k += 18;
 
-	md5(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
+	d = p->cert_data + p->info_start;
+	n = p->info_offset + p->info_length - p->info_start;
+
+	md5(d, n, buf + k);
 
 	return buf;
 }
@@ -42,7 +45,7 @@ uint8_t *
 pkcs_sha1_signature(struct certinfo *p)
 {
 	int k, n;
-	uint8_t *buf;
+	uint8_t *buf, *d;
 
 	n = p->signature_length - 38; // 3 + 15 + 20 = 38 bytes
 
@@ -69,7 +72,10 @@ pkcs_sha1_signature(struct certinfo *p)
 
 	k += 15;
 
-	sha1(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
+	d = p->cert_data + p->info_start;
+	n = p->info_offset + p->info_length - p->info_start;
+
+	sha1(d, n, buf + k);
 
 	return buf;
 }
@@ -78,7 +84,7 @@ uint8_t *
 pkcs_sha224_signature(struct certinfo *p)
 {
 	int k, n;
-	uint8_t *buf;
+	uint8_t *buf, *d;
 
 	n = p->signature_length - 50; // 3 + 19 + 28 = 50 bytes
 
@@ -107,7 +113,10 @@ pkcs_sha224_signature(struct certinfo *p)
 
 	k += 19;
 
-	sha224(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
+	d = p->cert_data + p->info_start;
+	n = p->info_offset + p->info_length - p->info_start;
+
+	sha224(d, n, buf + k);
 
 	return buf;
 }
@@ -116,7 +125,7 @@ uint8_t *
 pkcs_sha256_signature(struct certinfo *p)
 {
 	int k, n;
-	uint8_t *buf;
+	uint8_t *buf, *d;
 
 	n = p->signature_length - 54; // 3 + 19 + 32 = 54 bytes
 
@@ -143,7 +152,10 @@ pkcs_sha256_signature(struct certinfo *p)
 
 	k += 19;
 
-	sha256(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
+	d = p->cert_data + p->info_start;
+	n = p->info_offset + p->info_length - p->info_start;
+
+	sha256(d, n, buf + k);
 
 	return buf;
 }
@@ -152,7 +164,7 @@ uint8_t *
 pkcs_sha384_signature(struct certinfo *p)
 {
 	int k, n;
-	uint8_t *buf;
+	uint8_t *buf, *d;
 
 	n = p->signature_length - 70; // 3 + 19 + 48 = 70 bytes
 
@@ -179,7 +191,10 @@ pkcs_sha384_signature(struct certinfo *p)
 
 	k += 19;
 
-	sha384(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
+	d = p->cert_data + p->info_start;
+	n = p->info_offset + p->info_length - p->info_start;
+
+	sha384(d, n, buf + k);
 
 	return buf;
 }
@@ -188,7 +203,7 @@ uint8_t *
 pkcs_sha512_signature(struct certinfo *p)
 {
 	int k, n;
-	uint8_t *buf;
+	uint8_t *buf, *d;
 
 	n = p->signature_length - 86; // 3 + 19 + 64 = 86 bytes
 
@@ -215,7 +230,10 @@ pkcs_sha512_signature(struct certinfo *p)
 
 	k += 19;
 
-	sha512(p->cert_data + p->top_offset, p->info_offset + p->info_length - p->top_offset, buf + k);
+	d = p->cert_data + p->info_start;
+	n = p->info_offset + p->info_length - p->info_start;
+
+	sha512(d, n, buf + k);
 
 	return buf;
 }
