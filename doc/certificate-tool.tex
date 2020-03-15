@@ -30,8 +30,8 @@ void rsa_decrypt
 
 \noindent
 Decrypts the contents of {\tt buf} in situ using the private key in {\tt key}.
-This function is used to sign a certificate hence inbound {\tt buf} is a
-plaintext signature that is encrypted by this function.
+This function is used to sign a certificate in which case inbound {\tt buf} is a
+plaintext signature and outbound {\tt buf} is encrypted.
 
 \newpage
 \section{Elliptic curve functions}
