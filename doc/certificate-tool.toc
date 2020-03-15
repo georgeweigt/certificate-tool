@@ -1,4 +1,0 @@
-\contentsline {section}{\numberline {1}RSA functions}{2}
-\contentsline {section}{\numberline {2}Elliptic curve functions}{3}
-\contentsline {section}{\numberline {3}Signing algorithm}{4}
-\contentsline {section}{\numberline {4}ASN.1 Encodings}{5}
