@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# rsa
+
 openssl genrsa -out key.pem 1024
 openssl req -new -key key.pem -out csr.pem -subj "/O=alpha/CN=alpha"
 openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out a.pem -sha256
@@ -8,7 +10,7 @@ openssl genrsa -out key.pem 2048
 openssl req -new -key key.pem -out csr.pem -subj "/O=beta/CN=beta"
 openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out b.pem -sha1
 
-# convert format for dumpasn1
+# make der files for dumpasn1
 openssl x509 -in a.pem -inform PEM -out a.der -outform DER
 openssl x509 -in b.pem -inform PEM -out b.der -outform DER
 openssl rsa -in key.pem -inform PEM -out key.der -outform DER

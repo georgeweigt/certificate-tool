@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# secp384r1
+# for testing EC signed by RSA
 
-openssl ecparam -out key.pem -name secp384r1 -genkey
+openssl ecparam -out key.pem -name prime256v1 -genkey
 openssl req -new -key key.pem -out csr.pem -subj "/O=alpha/CN=alpha"
-openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out a.pem -sha256
+openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out a.pem -sha1
 
-openssl ecparam -out key.pem -name secp384r1 -genkey
+openssl genrsa -out key.pem 1024
 openssl req -new -key key.pem -out csr.pem -subj "/O=beta/CN=beta"
 openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out b.pem -sha256
 
 # make der files for dumpasn1
 openssl x509 -in a.pem -inform PEM -out a.der -outform DER
 openssl x509 -in b.pem -inform PEM -out b.der -outform DER
-openssl ec -in key.pem -inform PEM -out key.der -outform DER
+openssl rsa -in key.pem -inform PEM -out key.der -outform DER
 
 rm csr.pem
