@@ -1,8 +1,39 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath}
 \usepackage[margin=2cm]{geometry}
+
 \begin{document}
 
+\tableofcontents
+
+\newpage
+\section{RSA functions}
+
+\bigskip
+\bigskip
+\begin{verbatim}
+uint8_t *rsa_encrypt_signature
+          (struct certinfo *p, struct certinfo *q)
+\end{verbatim}
+
+\noindent
+Encrypts the signature in {\tt p} using the public key in {\tt q} and returns the result.
+Caller must free the result.
+Note that RSA encryption applied to a certificate signature actually decrypts the signature.
+
+\bigskip
+\bigskip
+\begin{verbatim}
+void rsa_decrypt
+          (uint8_t *buf, int len, struct keyinfo *key)
+\end{verbatim}
+
+\noindent
+Decrypts the contents of {\tt buf} in situ using the private key in {\tt key}.
+This function is used to sign a certificate hence inbound {\tt buf} is a
+plaintext signature that is encrypted by this function.
+
+\newpage
 \section{Elliptic curve functions}
 
 \bigskip
@@ -163,13 +194,22 @@ and no one can change $s$ without knowing the secret key.
 Hence we can trust the contents of $P$ if we trust $Q$.
 
 \newpage
-\section{RSA}
-
-\subsection{Public key format}
+\section{ASN.1 Encodings}
 
 \noindent
-The two integers are the modulus followed by the exponent.
-This example is for RSA 2048 which has a 256 byte modulus.
+Encoded integers may have an extra leading 00 byte due to encoding rules.
+The rule adds the 00 byte if the first byte of the unencoded integer is greater than 127.
+
+\bigskip
+\noindent
+For example, a 256 byte RSA modulus that begins with hex 80 is encoded as 257 bytes.
+
+\newpage
+\subsection*{RSA public key encoding}
+
+\noindent
+The following example is for RSA 2048 which has a 256 byte modulus.
+The two integers in the encoding are the modulus followed by the exponent.
 
 \begin{verbatim}
 171 290:     SEQUENCE {
@@ -195,10 +235,10 @@ This example is for RSA 2048 which has a 256 byte modulus.
        :       }
 \end{verbatim}
 
-\subsection{Signature format}
+\subsection*{RSA signature encoding}
 
 \noindent
-The signature length is the same as the RSA modulus.
+The number of data bytes in the bit string is the same as the length of the unencoded RSA modulus.
 
 \begin{verbatim}
 515  13:   SEQUENCE {
@@ -218,12 +258,10 @@ The signature length is the same as the RSA modulus.
 \end{verbatim}
 
 \newpage
-\section{prime256v1}
-
-\subsection{Public key format}
+\subsection*{prime256v1 public key encoding}
 
 \noindent
-Bit string is $04\Vert X\Vert Y$ where both $X$ and $Y$ are 32 bytes long.
+Bit string data is the byte sequence $(04\mid X\mid Y)$ where both $X$ and $Y$ are 32 bytes long.
 
 \begin{verbatim}
 162  89:     SEQUENCE {
@@ -240,7 +278,7 @@ Bit string is $04\Vert X\Vert Y$ where both $X$ and $Y$ are 32 bytes long.
        :       }
 \end{verbatim}
 
-\subsection{Signature format}
+\subsection*{rime256v1 signature encoding}
 
 \noindent
 The two integers are $R$ followed by $S$, both 32 bytes long.
@@ -265,12 +303,10 @@ hence in this example $R$ is 33 bytes long with a leading 00.
 \end{verbatim}
 
 \newpage
-\section{secp384r1}
-
-\subsection{Public key format}
+\subsection*{secp384r1 public key encoding}
 
 \noindent
-Bit string is $04\Vert X\Vert Y$ where both $X$ and $Y$ are 48 bytes long.
+Bit string data is the byte sequence $(04\mid X\mid Y)$ where both $X$ and $Y$ are 48 bytes long.
 
 \begin{verbatim}
 163 118:     SEQUENCE {
@@ -289,7 +325,7 @@ Bit string is $04\Vert X\Vert Y$ where both $X$ and $Y$ are 48 bytes long.
        :       }
 \end{verbatim}
 
-\subsection{Signature format}
+\subsection*{secp384r1 signature encoding}
 
 \noindent
 The two integers are $R$ followed by $S$, both 48 bytes long.
