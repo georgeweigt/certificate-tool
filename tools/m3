@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# secp384r1
+# make secp384r1 certificates a.pem, b.pem
 
 openssl ecparam -out key.pem -name secp384r1 -genkey
 openssl req -new -key key.pem -out csr.pem -subj "/O=alpha/CN=alpha"

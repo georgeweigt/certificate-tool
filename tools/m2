@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# prime256v1
+# make prime256v1 certificates a.pem, b.pem
 
 openssl ecparam -out key.pem -name prime256v1 -genkey
 openssl req -new -key key.pem -out csr.pem -subj "/O=alpha/CN=alpha"

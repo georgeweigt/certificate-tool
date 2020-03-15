@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# rsa
+# make rsa certificates a.pem, b.pem
 
 openssl genrsa -out key.pem 1024
 openssl req -new -key key.pem -out csr.pem -subj "/O=alpha/CN=alpha"

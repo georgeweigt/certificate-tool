@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# for testing RSA signed by EC
+# make a.pem, b.pem for testing RSA signed by EC
 
 openssl genrsa -out key.pem 1024
 openssl req -new -key key.pem -out csr.pem -subj "/O=alpha/CN=alpha"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# for testing EC signed by RSA
+# make a.pem, b.pem for testing EC signed by RSA
 
 openssl ecparam -out key.pem -name prime256v1 -genkey
 openssl req -new -key key.pem -out csr.pem -subj "/O=alpha/CN=alpha"
