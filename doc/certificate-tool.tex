@@ -1,7 +1,60 @@
 \documentclass[12pt]{article}
+\usepackage{amsmath}
 \usepackage[margin=2cm]{geometry}
 \begin{document}
 
+\section{Elliptic curve functions}
+
+\bigskip
+\bigskip
+\begin{verbatim}
+void ecdsa256_signature
+          (struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
+\end{verbatim}
+
+\noindent
+Encrypts {\tt hash} using the cipher prime256v1.
+The 64 byte result is returned in {\tt sig}.
+
+\bigskip
+\begin{tabular}{ll}
+{\tt key} & Pointer to a {\tt keyinfo} that contains a private key.\\
+{\tt hash} & Pointer to a hash digest value.\\
+{\tt len} & Byte length of hash digest value (32 bytes maximum).\\
+{\tt sig} & Pointer to a 64 byte buffer.
+\end{tabular}
+
+\bigskip
+\bigskip
+\begin{verbatim}
+void ecdsa384_signature
+          (struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
+\end{verbatim}
+
+\noindent
+Encrypts {\tt hash} using the cipher secp384r1.
+The 96 byte result is returned in {\tt sig}.
+
+\bigskip
+\begin{tabular}{ll}
+{\tt key} & Pointer to a {\tt keyinfo} that contains a private key.\\
+{\tt hash} & Pointer to a hash digest value.\\
+{\tt len} & Byte length of hash digest value (48 bytes maximum).\\
+{\tt sig} & Pointer to a 96 byte buffer.
+\end{tabular}
+
+\bigskip
+\bigskip
+\begin{verbatim}
+int ecdsa256_verify
+          (struct certinfo *p, struct certinfo *q)
+\end{verbatim}
+
+\noindent
+Returns 0 if certificate {\tt p} is signed by {\tt q}.
+The public key in {\tt q} is prime256v1.
+
+\newpage
 \section{Signing algorithm}
 
 \noindent
