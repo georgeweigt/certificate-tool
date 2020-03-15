@@ -197,8 +197,8 @@ Hence we can trust the contents of $P$ if we trust $Q$.
 \section{ASN.1 Encodings}
 
 \noindent
-Encoded integers may have an extra leading 00 byte due to encoding rules.
-The rule adds the 00 byte if the first byte of the unencoded integer is greater than 127.
+Encoded integers may have an extra leading 00 byte added due to encoding rules.
+Encoding rules add the 00 byte if the first byte of the unencoded integer is greater than 127.
 
 \bigskip
 \noindent
@@ -261,7 +261,8 @@ The number of data bytes in the bit string is the same as the length of the unen
 \subsection*{prime256v1 public key encoding}
 
 \noindent
-Bit string data is the byte sequence $(04\mid X\mid Y)$ where both $X$ and $Y$ are 32 bytes long.
+Bit string data is the byte sequence $(04\mid X\mid Y)$.
+The unencoded length of $X$ is 32 bytes and the unencoded length of $Y$ is 32 bytes.
 
 \begin{verbatim}
 162  89:     SEQUENCE {
@@ -278,12 +279,11 @@ Bit string data is the byte sequence $(04\mid X\mid Y)$ where both $X$ and $Y$ a
        :       }
 \end{verbatim}
 
-\subsection*{rime256v1 signature encoding}
+\subsection*{prime256v1 signature encoding}
 
 \noindent
-The two integers are $R$ followed by $S$, both 32 bytes long.
-Integer format requires the first octet to be less than 128
-hence in this example $R$ is 33 bytes long with a leading 00.
+The two integers in the encoding are $R$ followed by $S$.
+The unencoded length of $R$ is 32 bytes and the unencoded length of $S$ is 32 bytes.
 
 \begin{verbatim}
 253  10:   SEQUENCE {
@@ -306,7 +306,8 @@ hence in this example $R$ is 33 bytes long with a leading 00.
 \subsection*{secp384r1 public key encoding}
 
 \noindent
-Bit string data is the byte sequence $(04\mid X\mid Y)$ where both $X$ and $Y$ are 48 bytes long.
+Bit string data is the byte sequence $(04\mid X\mid Y)$.
+The unencoded length of $X$ is 48 bytes and the unencoded length of $Y$ is 48 bytes.
 
 \begin{verbatim}
 163 118:     SEQUENCE {
@@ -328,9 +329,8 @@ Bit string data is the byte sequence $(04\mid X\mid Y)$ where both $X$ and $Y$ a
 \subsection*{secp384r1 signature encoding}
 
 \noindent
-The two integers are $R$ followed by $S$, both 48 bytes long.
-Integer format requires the first octet to be less than 128
-hence in this example $S$ is 47 bytes long with a leading 00.
+The two integers in the encoding are $R$ followed by $S$.
+The unencoded length of $R$ is 48 bytes and the unencoded length of $S$ is 48 bytes.
 
 \begin{verbatim}
 283  10:   SEQUENCE {
