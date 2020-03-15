@@ -165,6 +165,11 @@ struct certinfo {
 	uint8_t cert_data[0];
 };
 
+#define ec_len(p) (p)[-1]
+extern int ec_malloc_count;
+extern uint32_t *p256, *q256, *gx256, *gy256;
+extern uint32_t *p384, *q384, *gx384, *gy384;
+
 struct point {
 	uint32_t *x, *y, *z;
 };

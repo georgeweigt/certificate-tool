@@ -24,11 +24,11 @@ check_signature(struct certinfo *p, struct certinfo *q)
 		break;
 
 	case PRIME256V1:
-		err = ecdsa256_verify(p, q);
+		err = ec256_verify(p, q);
 		break;
 
 	case SECP384R1:
-		err = ecdsa384_verify(p, q);
+		err = ec384_verify(p, q);
 		break;
 	}
 

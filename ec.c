@@ -161,24 +161,24 @@ ecdsa256_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t
 	return err;
 }
 
-// returns 64 byte signature in sig
+// encrypts a hash value (32 bytes max) and returns the 64 byte result in sig
 
 void
-ecdsa256_signature(struct keyinfo *key, uint8_t *hash, int hash_len, uint8_t *sig)
+ec256_encrypt(struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
 {
 	uint32_t *d, *h;
 
-	h = ec_buf_to_bignum(hash, hash_len);
+	h = ec_buf_to_bignum(hash, len);
 	d = ec_buf_to_bignum(key->key_data + key->ec_private_key_offset, key->ec_private_key_length);
 
-	ecdsa256_sign_nib(h, d, sig);
+	ec256_encrypt_nib(h, d, sig);
 
 	ec_free(h);
 	ec_free(d);
 }
 
 void
-ecdsa256_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
+ec256_encrypt_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 {
 	int i, n;
 	uint32_t *k, *r, *s, *t;
@@ -445,24 +445,24 @@ ecdsa384_verify_nib(uint32_t *h, uint32_t *r, uint32_t *s, uint32_t *x, uint32_t
 	return err;
 }
 
-// returns 96 byte signature in sig
+// encrypts a hash value (48 bytes max) and returns the 96 byte result in sig
 
 void
-ecdsa384_signature(struct keyinfo *key, uint8_t *hash, int hash_len, uint8_t *sig)
+ec384_encrypt(struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
 {
 	uint32_t *d, *h;
 
-	h = ec_buf_to_bignum(hash, hash_len);
+	h = ec_buf_to_bignum(hash, len);
 	d = ec_buf_to_bignum(key->key_data + key->ec_private_key_offset, key->ec_private_key_length);
 
-	ecdsa384_sign_nib(h, d, sig);
+	ec384_encrypt_nib(h, d, sig);
 
 	ec_free(h);
 	ec_free(d);
 }
 
 void
-ecdsa384_sign_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
+ec384_encrypt_nib(uint32_t *h, uint32_t *d, uint8_t *sig)
 {
 	int i, n;
 	uint32_t *k, *r, *s, *t;
@@ -2243,7 +2243,7 @@ ec_test256()
 	x = ec_hexstr_to_bignum(str_x);
 	y = ec_hexstr_to_bignum(str_y);
 
-	ecdsa256_sign_nib(h, d, sig);
+	ec256_encrypt_nib(h, d, sig);
 
 	r = ec_buf_to_bignum(sig, 32);
 	s = ec_buf_to_bignum(sig + 32, 32);
@@ -2320,7 +2320,7 @@ ec_test384()
 	x = ec_hexstr_to_bignum(str_x);
 	y = ec_hexstr_to_bignum(str_y);
 
-	ecdsa384_sign_nib(h, d, sig);
+	ec384_encrypt_nib(h, d, sig);
 
 	r = ec_buf_to_bignum(sig, 48);
 	s = ec_buf_to_bignum(sig + 48, 48);

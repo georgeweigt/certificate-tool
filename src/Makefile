@@ -11,7 +11,9 @@ parse_key_data.o \
 base64.o \
 check_signature.o \
 rsa.o \
-ec.o \
+ec256.o \
+ec384.o \
+eccore.o \
 pkcs.o \
 md5.o \
 sha1.o \

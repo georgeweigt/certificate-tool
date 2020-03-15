@@ -367,7 +367,7 @@ sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 		return;
 	}
 
-	ecdsa256_signature(key, hash, len, sig);
+	ec256_encrypt(key, hash, len, sig);
 
 	buf = r->cert_data + r->signature_start;
 
@@ -457,7 +457,7 @@ sign_secp384r1(struct certinfo *r, struct keyinfo *key)
 		return;
 	}
 
-	ecdsa384_signature(key, hash, len, sig);
+	ec384_encrypt(key, hash, len, sig);
 
 	buf = r->cert_data + r->signature_start;
 
