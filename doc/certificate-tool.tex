@@ -75,7 +75,7 @@ Hence there are $256-3-19-32=202$ pad bytes.
 \bigskip
 \noindent
 Note that the above signature is the unencrypted value of $s$.
-In the actual certificate $P$, $s$ is encrypted using the secret key associated with $k$.
+In the actual certificate, $s$ is encrypted using the secret key associated with $k$.
 After encryption, $s$ is still 256 bytes long.
 
 \begin{center}
@@ -136,6 +136,8 @@ with the correct private key.
 \newpage
 \section{Elliptic curve functions}
 
+\subsection{prime256v1}
+
 \bigskip
 \bigskip
 \begin{verbatim}
@@ -144,8 +146,9 @@ void ec256_encrypt
 \end{verbatim}
 
 \noindent
-Encrypts {\tt hash} using the cipher prime256v1.
+Encrypts {\tt hash} using the private key in {\tt key}.
 The 64 byte result is returned in {\tt sig}.
+This function is used to sign a certificate.
 
 \bigskip
 \begin{tabular}{ll}
@@ -158,13 +161,28 @@ The 64 byte result is returned in {\tt sig}.
 \bigskip
 \bigskip
 \begin{verbatim}
+int ec256_verify
+          (struct certinfo *p, struct certinfo *q)
+\end{verbatim}
+
+\noindent
+Returns 0 if certificate {\tt p} is signed by {\tt q}
+where the public key type of {\tt q} is prime256v1.
+
+\bigskip
+\subsection{secp384r1}
+
+\bigskip
+\bigskip
+\begin{verbatim}
 void ec384_encrypt
           (struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
 \end{verbatim}
 
 \noindent
-Encrypts {\tt hash} using the cipher secp384r1.
+Encrypts {\tt hash} using the private key in {\tt key}.
 The 96 byte result is returned in {\tt sig}.
+This function is used to sign a certificate.
 
 \bigskip
 \begin{tabular}{ll}
@@ -173,17 +191,6 @@ The 96 byte result is returned in {\tt sig}.
 {\tt len} & Byte length of hash digest value (48 bytes maximum).\\
 {\tt sig} & Pointer to a 96 byte buffer.
 \end{tabular}
-
-\bigskip
-\bigskip
-\begin{verbatim}
-int ec256_verify
-          (struct certinfo *p, struct certinfo *q)
-\end{verbatim}
-
-\noindent
-Returns 0 if certificate {\tt p} is signed by {\tt q}
-where the public key type of {\tt q} is prime256v1.
 
 \bigskip
 \bigskip
