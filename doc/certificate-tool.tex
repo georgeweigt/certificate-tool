@@ -7,96 +7,6 @@
 \tableofcontents
 
 \newpage
-\section{RSA functions}
-
-\bigskip
-\bigskip
-\begin{verbatim}
-uint8_t *rsa_encrypt_signature
-          (struct certinfo *p, struct certinfo *q)
-\end{verbatim}
-
-\noindent
-Encrypts the signature in {\tt p} using the public key in {\tt q} and returns the result.
-Caller must free the result.
-Note that RSA encryption applied to a certificate signature actually decrypts the signature.
-
-\bigskip
-\bigskip
-\begin{verbatim}
-void rsa_decrypt
-          (uint8_t *buf, int len, struct keyinfo *key)
-\end{verbatim}
-
-\noindent
-Decrypts the contents of {\tt buf} in situ using the private key in {\tt key}.
-This function is used to sign a certificate in which case inbound {\tt buf} is a
-plaintext signature and outbound {\tt buf} is encrypted.
-
-\newpage
-\section{Elliptic curve functions}
-
-\bigskip
-\bigskip
-\begin{verbatim}
-void ec256_encrypt
-          (struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
-\end{verbatim}
-
-\noindent
-Encrypts {\tt hash} using the cipher prime256v1.
-The 64 byte result is returned in {\tt sig}.
-
-\bigskip
-\begin{tabular}{ll}
-{\tt key} & Pointer to a private key.\\
-{\tt hash} & Pointer to a hash digest value.\\
-{\tt len} & Byte length of hash digest value (32 bytes maximum).\\
-{\tt sig} & Pointer to a 64 byte buffer.
-\end{tabular}
-
-\bigskip
-\bigskip
-\begin{verbatim}
-void ec384_encrypt
-          (struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
-\end{verbatim}
-
-\noindent
-Encrypts {\tt hash} using the cipher secp384r1.
-The 96 byte result is returned in {\tt sig}.
-
-\bigskip
-\begin{tabular}{ll}
-{\tt key} & Pointer to a private key.\\
-{\tt hash} & Pointer to a hash digest value.\\
-{\tt len} & Byte length of hash digest value (48 bytes maximum).\\
-{\tt sig} & Pointer to a 96 byte buffer.
-\end{tabular}
-
-\bigskip
-\bigskip
-\begin{verbatim}
-int ec256_verify
-          (struct certinfo *p, struct certinfo *q)
-\end{verbatim}
-
-\noindent
-Returns 0 if certificate {\tt p} is signed by {\tt q}
-where the public key type of {\tt q} is prime256v1.
-
-\bigskip
-\bigskip
-\begin{verbatim}
-int ec384_verify
-          (struct certinfo *p, struct certinfo *q)
-\end{verbatim}
-
-\noindent
-Returns 0 if certificate {\tt p} is signed by {\tt q}
-where the public key type of {\tt q} is secp384r1.
-
-\newpage
 \section{Signing algorithm}
 
 \noindent
@@ -192,6 +102,99 @@ Only the owner of $Q$ knows the secret key.
 No one can change the contents of $P$ without breaking the hash digest in $s$,
 and no one can change $s$ without knowing the secret key.
 Hence we can trust the contents of $P$ if we trust $Q$.
+
+\newpage
+\section{RSA functions}
+
+\bigskip
+\bigskip
+\begin{verbatim}
+void rsa_decrypt
+          (uint8_t *buf, int len, struct keyinfo *key)
+\end{verbatim}
+
+\noindent
+Decrypts the contents of {\tt buf} in situ using the private key in {\tt key}.
+This function is used to sign a certificate.
+When signing a certificate, the inbound
+{\tt buf} is a plaintext signature and the outbound {\tt buf} is the encrypted
+signature.
+
+\bigskip
+\bigskip
+\begin{verbatim}
+uint8_t *rsa_encrypt_signature
+          (struct certinfo *p, struct certinfo *q)
+\end{verbatim}
+
+\noindent
+Encrypts the signature in {\tt p} using the public key in {\tt q} and returns the result.
+Caller must free the result.
+This function actually decrypts the signature which proves the certificate was signed
+with the correct private key.
+
+\newpage
+\section{Elliptic curve functions}
+
+\bigskip
+\bigskip
+\begin{verbatim}
+void ec256_encrypt
+          (struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
+\end{verbatim}
+
+\noindent
+Encrypts {\tt hash} using the cipher prime256v1.
+The 64 byte result is returned in {\tt sig}.
+
+\bigskip
+\begin{tabular}{ll}
+{\tt key} & Pointer to a private key.\\
+{\tt hash} & Pointer to a hash digest value.\\
+{\tt len} & Byte length of hash digest value (32 bytes maximum).\\
+{\tt sig} & Pointer to a 64 byte buffer.
+\end{tabular}
+
+\bigskip
+\bigskip
+\begin{verbatim}
+void ec384_encrypt
+          (struct keyinfo *key, uint8_t *hash, int len, uint8_t *sig)
+\end{verbatim}
+
+\noindent
+Encrypts {\tt hash} using the cipher secp384r1.
+The 96 byte result is returned in {\tt sig}.
+
+\bigskip
+\begin{tabular}{ll}
+{\tt key} & Pointer to a private key.\\
+{\tt hash} & Pointer to a hash digest value.\\
+{\tt len} & Byte length of hash digest value (48 bytes maximum).\\
+{\tt sig} & Pointer to a 96 byte buffer.
+\end{tabular}
+
+\bigskip
+\bigskip
+\begin{verbatim}
+int ec256_verify
+          (struct certinfo *p, struct certinfo *q)
+\end{verbatim}
+
+\noindent
+Returns 0 if certificate {\tt p} is signed by {\tt q}
+where the public key type of {\tt q} is prime256v1.
+
+\bigskip
+\bigskip
+\begin{verbatim}
+int ec384_verify
+          (struct certinfo *p, struct certinfo *q)
+\end{verbatim}
+
+\noindent
+Returns 0 if certificate {\tt p} is signed by {\tt q}
+where the public key type of {\tt q} is secp384r1.
 
 \newpage
 \section{ASN.1 Encodings}
