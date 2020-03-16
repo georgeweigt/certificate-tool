@@ -204,6 +204,44 @@ Returns 0 if certificate {\tt p} is signed by {\tt q}
 where the public key type of {\tt q} is secp384r1.
 
 \newpage
+\section{Hash functions}
+
+\bigskip
+\bigskip
+\begin{verbatim}
+void md5(uint8_t *buf, int len, uint8_t *out)
+void sha1(uint8_t *buf, int len, uint8_t *out)
+void sha224(uint8_t *buf, int len, uint8_t *out)
+void sha256(uint8_t *buf, int len, uint8_t *out)
+void sha384(uint8_t *buf, int len, uint8_t *out)
+void sha512(uint8_t *buf, int len, uint8_t *out)
+\end{verbatim}
+
+\noindent
+The hash value of {\tt buf} is returned in {\tt out}.
+Argument {\tt len} is the length of {\tt buf} in bytes.
+The following table shows the byte length of each result.
+
+\bigskip
+\noindent
+\begin{tabular}{|l|l|}
+\hline
+Digest & Length\\
+\hline
+MD5 & 16 bytes\\
+SHA1 & 20\\
+SHA224 & 28\\
+SHA256 & 32\\
+SHA384 & 48\\
+SHA512 & 64\\
+\hline
+\end{tabular}
+
+\bigskip
+\noindent
+The hash value of a certificate is encrypted in the certificate signature.
+
+\newpage
 \section{ASN.1 Encodings}
 
 \noindent
