@@ -215,7 +215,9 @@ Encoding rules add the 00 byte if the first byte of the unencoded integer is gre
 For example, a 256 byte RSA modulus that begins with hex 80 is encoded as 257 bytes.
 
 \newpage
-\subsection*{RSA public key encoding}
+\subsection{RSA}
+
+\subsubsection{Public key}
 
 \noindent
 The following example is for RSA 2048 which has a 256 byte modulus.
@@ -245,7 +247,7 @@ The two integers in the encoding are the modulus followed by the exponent.
        :       }
 \end{verbatim}
 
-\subsection*{RSA signature encoding}
+\subsubsection{Signature}
 
 \noindent
 The number of data bytes in the bit string is the same as the length of the unencoded RSA modulus.
@@ -268,7 +270,9 @@ The number of data bytes in the bit string is the same as the length of the unen
 \end{verbatim}
 
 \newpage
-\subsection*{prime256v1 public key encoding}
+\subsection{prime256v1}
+
+\subsubsection{Public key}
 
 \noindent
 Bit string data is the byte sequence $(04\mid X\mid Y)$.
@@ -289,7 +293,7 @@ The length of $X$ is 32 bytes and the length of $Y$ is 32 bytes.
        :       }
 \end{verbatim}
 
-\subsection*{prime256v1 signature encoding}
+\subsubsection{Signature}
 
 \noindent
 The two integers in the encoding are $R$ followed by $S$.
@@ -313,7 +317,9 @@ The unencoded length of $R$ is 32 bytes and the unencoded length of $S$ is 32 by
 \end{verbatim}
 
 \newpage
-\subsection*{secp384r1 public key encoding}
+\subsection{secp384r1}
+
+\subsubsection{Public key}
 
 \noindent
 Bit string data is the byte sequence $(04\mid X\mid Y)$.
@@ -336,7 +342,7 @@ The length of $X$ is 48 bytes and the length of $Y$ is 48 bytes.
        :       }
 \end{verbatim}
 
-\subsection*{secp384r1 signature encoding}
+\subsubsection{Signature}
 
 \noindent
 The two integers in the encoding are $R$ followed by $S$.
