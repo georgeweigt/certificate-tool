@@ -374,6 +374,8 @@ sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 
 	k = 5;
 
+	// encode r
+
 	buf[k++] = INTEGER;
 
 	if (sig[0] & 0x80) {
@@ -385,6 +387,8 @@ sign_prime256v1(struct certinfo *r, struct keyinfo *key)
 	memcpy(buf + k, sig, 32);
 
 	k += 32;
+
+	// encode s
 
 	buf[k++] = INTEGER;
 
@@ -465,6 +469,8 @@ sign_secp384r1(struct certinfo *r, struct keyinfo *key)
 
 	k = 5;
 
+	// encode r
+
 	buf[k++] = INTEGER;
 
 	if (sig[0] & 0x80) {
@@ -476,6 +482,8 @@ sign_secp384r1(struct certinfo *r, struct keyinfo *key)
 	memcpy(buf + k, sig, 48);
 
 	k += 48;
+
+	// encode s
 
 	buf[k++] = INTEGER;
 
