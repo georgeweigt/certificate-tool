@@ -89,7 +89,7 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 
 	k += sign_signature_algorithm(buf + k, p, key);
 
-	// set up for signature
+	// write a provisional signature for parser
 
 	switch (key->key_type) {
 
@@ -107,7 +107,6 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 
 	case PRIME256V1:
 	case SECP384R1:
-		// write a dummy signature for parser
 		buf[k++] = BIT_STRING;
 		buf[k++] = 9; // length
 		buf[k++] = 0; // remainder byte
