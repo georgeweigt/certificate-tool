@@ -1,6 +1,10 @@
 #include "defs.h"
 
-// Sign p with q and return the result (key is q's private key)
+// Sign certificate p with q and return the result.
+//
+// Caller frees result.
+//
+// Argument 'key' is q's private key.
 
 struct certinfo *
 sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
