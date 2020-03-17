@@ -112,10 +112,6 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 		buf[k++] = 1; // length
 		buf[k++] = 0; // value
 		break;
-
-	default:
-		free(r);
-		return NULL;
 	}
 
 	// write length of cert
@@ -150,10 +146,6 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 	case SECP384R1:
 		sign_secp384r1(r, key);
 		break;
-
-	default:
-		free(r);
-		return NULL;
 	}
 
 	return r;
