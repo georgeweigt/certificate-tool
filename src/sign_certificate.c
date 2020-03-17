@@ -2,9 +2,9 @@
 
 // Sign certificate p with q and return the result.
 //
-// Caller frees result.
-//
 // Argument 'key' is q's private key.
+//
+// Returned certificate is a malloc'd buffer that caller should free.
 
 struct certinfo *
 sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
