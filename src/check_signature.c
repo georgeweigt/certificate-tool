@@ -1,21 +1,13 @@
 #include "defs.h"
 
-// is p signed by q? (returns 0 for yes, -1 for no)
+// Returns 0 if p is signed by q
 
 int
 check_signature(struct certinfo *p, struct certinfo *q)
 {
-	int err = -1;
+	int err;
 
-	// check that p->issuer matches q->subject
-
-	if (p->issuer_length != q->subject_length)
-		return -1;
-
-	if (memcmp(p->cert_data + p->issuer_offset, q->cert_data + q->subject_offset, p->issuer_length) != 0)
-		return -1;
-
-	// switch on issuer's public key algorithm
+	// switch on q's encryption algorithm
 
 	switch (q->encryption_algorithm) {
 
@@ -30,6 +22,9 @@ check_signature(struct certinfo *p, struct certinfo *q)
 	case SECP384R1:
 		err = ec384_verify(p, q);
 		break;
+	default:
+		err = -1;
+		break;
 	}
 
 	return err;
@@ -41,7 +36,7 @@ check_rsa_signature(struct certinfo *p, struct certinfo *q)
 	int err;
 	uint8_t *buf, *sig = NULL;
 
-	// switch on subject's signature algorithm
+	// switch on p's signature algorithm
 
 	switch (p->signature_algorithm) {
 
