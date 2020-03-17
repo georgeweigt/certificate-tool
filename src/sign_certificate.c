@@ -11,26 +11,34 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 
 	// adjust for length change
 
-	n = p->cert_length - p->issuer_length + q->issuer_length;
+	n = p->info_length + 8; // +8 for first two SEQ
+
+	// subtract length of p's issuer
+
+	n -= p->issuer_offset + p->issuer_length - p->issuer_start;
+
+	// add length of q's subject
+
+	n += q->subject_offset + q->subject_length - q->subject_start;
 
 	switch (key->key_type) {
 
 	case RSA_ENCRYPTION:
-		n = n - p->signature_length + key->modulus_length;
+		n += key->modulus_length;
 		break;
 
 	case PRIME256V1:
 	case SECP384R1:
-		n = n - p->signature_length + key->ec_public_key_length;
+		n += key->ec_public_key_length;
 		break;
 
 	default:
 		return NULL;
 	}
 
-	// malloc with some extra space to accommodate possible changes in length encoding
+	n += 100; // for signature OID and signature encoding
 
-	r = malloc(sizeof (struct certinfo) + n + 64);
+	r = malloc(sizeof (struct certinfo) + n);
 
 	if (r == NULL)
 		malloc_kaput();
