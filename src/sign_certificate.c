@@ -65,7 +65,7 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 
 	k += sign_signature_algorithm(buf + k, p, key);
 
-	// q's subject field becomes new issuer
+	// q's subject field becomes issuer
 
 	i = q->subject_start;
 	j = q->subject_offset + q->subject_length;
