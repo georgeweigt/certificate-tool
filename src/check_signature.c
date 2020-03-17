@@ -5,7 +5,7 @@
 int
 check_signature(struct certinfo *p, struct certinfo *q)
 {
-	int err;
+	int err = -1;
 
 	// switch on q's encryption algorithm
 
@@ -21,9 +21,6 @@ check_signature(struct certinfo *p, struct certinfo *q)
 
 	case SECP384R1:
 		err = ec384_verify(p, q);
-		break;
-	default:
-		err = -1;
 		break;
 	}
 
