@@ -1,11 +1,5 @@
-.PHONY: default clean
-
-%.pdf: %.tex
-	pdflatex $<
-	pdflatex $<
-
-default:
-	make certificate-tool.pdf
+certificate-tool.pdf: certificate-tool.tex
+	pdflatex certificate-tool.tex
 
 clean:
 	rm -f *.aux *.log *.synctex.gz *.toc

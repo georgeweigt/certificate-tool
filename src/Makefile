@@ -1,31 +1,15 @@
 CC = gcc
 CFLAGS = -Wall -O0
 
-objects = \
-main.o \
-read_certificate.o \
-parse_certificate.o \
-sign_certificate.o \
-read_key_file.o \
-parse_key_data.o \
-base64.o \
-check_signature.o \
-rsa.o \
-ec256.o \
-ec384.o \
-eccore.o \
-pkcs.o \
-md5.o \
-sha1.o \
-sha224.o \
-sha256.o \
-sha384.o \
-sha512.o
+# := means evaluate then assign result to variable
+# sed removes the commas then replaces .c with .o
 
-ctool : $(objects)
+objects := $(shell ls -m *.c | sed "s/,//g;s/\.c/\.o/g")
+
+ctool: $(objects)
 	gcc $(objects) -o ctool
 
 $(objects) : defs.h prototypes.h
 
-clean :
-	rm -f ctool *.o *.pem
+clean:
+	rm -f ctool *.o
