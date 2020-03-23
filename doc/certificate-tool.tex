@@ -129,6 +129,7 @@ uint8_t *rsa_decrypt_signature
 Decrypts the signature in certificate {\tt p} using the public key in {\tt q} and returns the result.
 Result is NULL on error.
 Otherwise, result is a malloc'd buffer that caller should free.
+Length of malloc'd buffer is the same as signature length.
 
 \newpage
 \section{Elliptic curve functions}
