@@ -127,9 +127,7 @@ uint8_t *rsa_decrypt_signature
 
 \noindent
 Decrypts the signature in certificate {\tt p} using the public key in {\tt q} and returns the result.
-Caller must free the result.
-This function is used to prove that certificate {\tt p}
-was signed with the private key associated with {\tt q}.
+Result is a malloc'd buffer or NULL on error.
 
 \newpage
 \section{Elliptic curve functions}
