@@ -127,7 +127,8 @@ uint8_t *rsa_decrypt_signature
 
 \noindent
 Decrypts the signature in certificate {\tt p} using the public key in {\tt q} and returns the result.
-Result is a malloc'd buffer or NULL on error.
+Result is NULL on error.
+Otherwise, result is a malloc'd buffer that caller should free.
 
 \newpage
 \section{Elliptic curve functions}
