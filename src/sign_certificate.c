@@ -28,7 +28,7 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 	switch (key->key_type) {
 
 	case RSA_ENCRYPTION:
-		n += key->modulus_length;
+		n += key->modulus_length - 1;
 		break;
 
 	case PRIME256V1:
@@ -98,9 +98,7 @@ sign_certificate(struct certinfo *p, struct certinfo *q, struct keyinfo *key)
 	switch (key->key_type) {
 
 	case RSA_ENCRYPTION:
-		n = key->modulus_length;
-		if (n & 1)
-			n = n - 1; // length might be +1 due to encoding rules
+		n = key->modulus_length - 1;
 		buf[k++] = BIT_STRING;
 		buf[k++] = 0x82;
 		buf[k++] = (n + 1) >> 8; // add 1 for remainder byte

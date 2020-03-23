@@ -67,13 +67,18 @@ check_rsa_signature(struct certinfo *p, struct certinfo *q)
 
 	buf = rsa_decrypt_signature(p, q);
 
+	if (buf == NULL) {
+		free(sig);
+		return -1;
+	}
+
 	if (memcmp(buf, sig, p->signature_length) == 0)
 		err = 0;
 	else
 		err = -1;
 
-	free(buf);
 	free(sig);
+	free(buf);
 
 	return err;
 }

@@ -2,11 +2,11 @@
 
 #define MLENGTH(u) (u)[-1]
 
-// Returns (signature ** exponent) mod modulus
+// Decrypts p's signature using q's public key.
 //
-//	p	subject certificate (signature)
+// Returns NULL on error.
 //
-//	q	issuer certificate (exponent, modulus)
+// Otherwise, caller frees return value.
 
 uint8_t *
 rsa_decrypt_signature(struct certinfo *p, struct certinfo *q)
@@ -15,11 +15,29 @@ rsa_decrypt_signature(struct certinfo *p, struct certinfo *q)
 	uint8_t *buf;
 	uint32_t *a, *b, *c, *d;
 
+	// check length
+
+	if (p->signature_length != q->modulus_length - 1)
+		return NULL;
+
+	// compute (signature ** exponent) mod modulus
+
 	a = buf_to_int(p->cert_data + p->signature_offset, p->signature_length);
 	b = buf_to_int(q->cert_data + q->exponent_offset, q->exponent_length);
 	c = buf_to_int(q->cert_data + q->modulus_offset, q->modulus_length);
 
 	d = modpow(a, b, c);
+
+	mfree(a);
+	mfree(b);
+	mfree(c);
+
+	n = MLENGTH(d); // number of uint32_t in result
+
+	if (4 * n > p->signature_length) {
+		mfree(d);
+		return NULL; // bad modulus
+	}
 
 	buf = malloc(p->signature_length);
 
@@ -28,22 +46,15 @@ rsa_decrypt_signature(struct certinfo *p, struct certinfo *q)
 
 	memset(buf, 0, p->signature_length);
 
-	n = MLENGTH(d); // number of uint32_t in result
+	// convert result to big endian
 
-	// copy to convert result to big endian
-
-	if (4 * n <= p->signature_length) {
-		for (i = 0; i < n; i++) {
-			buf[p->signature_length - 4 * i - 4] = d[i] >> 24;
-			buf[p->signature_length - 4 * i - 3] = d[i] >> 16;
-			buf[p->signature_length - 4 * i - 2] = d[i] >> 8;
-			buf[p->signature_length - 4 * i - 1] = d[i];
-		}
+	for (i = 0; i < n; i++) {
+		buf[p->signature_length - 4 * i - 4] = d[i] >> 24;
+		buf[p->signature_length - 4 * i - 3] = d[i] >> 16;
+		buf[p->signature_length - 4 * i - 2] = d[i] >> 8;
+		buf[p->signature_length - 4 * i - 1] = d[i];
 	}
 
-	mfree(a);
-	mfree(b);
-	mfree(c);
 	mfree(d);
 
 	return buf;
