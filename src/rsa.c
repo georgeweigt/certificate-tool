@@ -4,11 +4,11 @@
 
 // Decrypts p's signature using q's public key and returns the result.
 //
-// Returns NULL on error.
-//
-// On success, returns the result in a malloc'd buffer that caller should free.
+// On success, result is returned in a malloc'd buffer that caller should free.
 //
 // Length of buffer is the same as signature length.
+//
+// Returns NULL on error.
 
 uint8_t *
 rsa_decrypt_signature(struct certinfo *p, struct certinfo *q)
