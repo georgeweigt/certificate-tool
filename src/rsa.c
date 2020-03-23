@@ -2,11 +2,13 @@
 
 #define MLENGTH(u) (u)[-1]
 
-// Decrypts p's signature using q's public key.
+// Decrypts p's signature using q's public key and returns result.
 //
 // Returns NULL on error.
 //
-// Otherwise, caller frees return value.
+// Otherwise, return value is a malloc'd buffer that caller should free.
+//
+// Length of malloc'd buffer is the same as signature length.
 
 uint8_t *
 rsa_decrypt_signature(struct certinfo *p, struct certinfo *q)
