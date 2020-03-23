@@ -328,7 +328,7 @@ sign_rsa(struct certinfo *r, struct keyinfo *key)
 
 	// encrypt signature (RSA decrypt procedure is used to encrypt signature)
 
-	rsa_decrypt(r->cert_data + r->signature_offset, r->signature_length, key);
+	rsa_encrypt_signature(r->cert_data + r->signature_offset, r->signature_length, key);
 }
 
 void

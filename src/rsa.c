@@ -4,14 +4,12 @@
 
 // Returns (signature ** exponent) mod modulus
 //
-// (Recall that encrypt applied to signature is actually decrypt)
-//
 //	p	subject certificate (signature)
 //
 //	q	issuer certificate (exponent, modulus)
 
 uint8_t *
-rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
+rsa_decrypt_signature(struct certinfo *p, struct certinfo *q)
 {
 	int i, n;
 	uint8_t *buf;
@@ -52,7 +50,7 @@ rsa_encrypt_signature(struct certinfo *p, struct certinfo *q)
 }
 
 void
-rsa_decrypt(uint8_t *buf, int len, struct keyinfo *key)
+rsa_encrypt_signature(uint8_t *sig, int len, struct keyinfo *key)
 {
 	int i;
 	uint32_t *a, *b, *c, *d, *e1, *e2, *h, *m1, *m2, n, *p, *q, *qinv, *t;
@@ -65,7 +63,7 @@ rsa_decrypt(uint8_t *buf, int len, struct keyinfo *key)
 
 	qinv = buf_to_int(key->key_data + key->coefficient_offset, key->coefficient_length);
 
-	c = buf_to_int(buf, len);
+	c = buf_to_int(sig, len);
 
 	m1 = modpow(c, e1, p);
 	m2 = modpow(c, e2, q);
@@ -84,14 +82,14 @@ rsa_decrypt(uint8_t *buf, int len, struct keyinfo *key)
 
 	n = MLENGTH(a); // number of uint32_t in result
 
-	memset(buf, 0, len);
+	memset(sig, 0, len);
 
 	if (4 * n <= len) {
 		for (i = 0; i < n; i++) {
-			buf[len - 4 * i - 4] = a[i] >> 24;
-			buf[len - 4 * i - 3] = a[i] >> 16;
-			buf[len - 4 * i - 2] = a[i] >> 8;
-			buf[len - 4 * i - 1] = a[i];
+			sig[len - 4 * i - 4] = a[i] >> 24;
+			sig[len - 4 * i - 3] = a[i] >> 16;
+			sig[len - 4 * i - 2] = a[i] >> 8;
+			sig[len - 4 * i - 1] = a[i];
 		}
 	}
 

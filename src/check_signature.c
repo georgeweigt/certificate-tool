@@ -65,7 +65,7 @@ check_rsa_signature(struct certinfo *p, struct certinfo *q)
 	if (sig == NULL)
 		return -1;
 
-	buf = rsa_encrypt_signature(p, q);
+	buf = rsa_decrypt_signature(p, q);
 
 	if (memcmp(buf, sig, p->signature_length) == 0)
 		err = 0;

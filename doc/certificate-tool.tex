@@ -75,7 +75,7 @@ Hence there are $256-3-19-32=202$ pad bytes.
 \bigskip
 \noindent
 Note that the above signature is the unencrypted value of $s$.
-In the actual certificate, $s$ is encrypted using the secret key associated with $k$.
+In the actual certificate, $s$ is encrypted using the private key associated with $k$.
 After encryption, $s$ is still 256 bytes long.
 
 \begin{center}
@@ -97,10 +97,10 @@ Then if HASH matches a digest of $P$, the signing of $P$ by $Q$ is proven.
 
 \bigskip
 \noindent
-Proving ``$P$ signed by $Q$'' proves that $s$ was encrypted using the secret key associated with $k$.
-Only the owner of $Q$ knows the secret key.
+Proving ``$P$ signed by $Q$'' proves that $s$ was encrypted using the private key associated with $k$.
+Only the owner of $Q$ knows the private key.
 No one can change the contents of $P$ without breaking the hash digest in $s$,
-and no one can change $s$ without knowing the secret key.
+and no one can change $s$ without knowing the private key.
 Hence we can trust the contents of $P$ if we trust $Q$.
 
 \newpage
@@ -109,29 +109,27 @@ Hence we can trust the contents of $P$ if we trust $Q$.
 \bigskip
 \bigskip
 \begin{verbatim}
-void rsa_decrypt
-          (uint8_t *buf, int len, struct keyinfo *key)
+void rsa_encrypt_signature
+          (uint8_t *sig, int len, struct keyinfo *key)
 \end{verbatim}
 
 \noindent
-Decrypts the contents of {\tt buf} in situ using the private key in {\tt key}.
+Encrypts signature {\tt sig} in situ using the private key in {\tt key}.
+Argument {\tt len} is the length of the signature in bytes.
 This function is used to sign a certificate.
-When signing a certificate, the inbound
-{\tt buf} is a plaintext signature and the outbound {\tt buf} is the encrypted
-signature.
 
 \bigskip
 \bigskip
 \begin{verbatim}
-uint8_t *rsa_encrypt_signature
+uint8_t *rsa_decrypt_signature
           (struct certinfo *p, struct certinfo *q)
 \end{verbatim}
 
 \noindent
-Encrypts the signature in {\tt p} using the public key in {\tt q} and returns the result.
+Decrypts the signature in certificate {\tt p} using the public key in {\tt q} and returns the result.
 Caller must free the result.
-This function actually decrypts the signature which proves the certificate was signed
-with the correct private key.
+This function is used to prove that certificate {\tt p}
+was signed with the private key associated with {\tt q}.
 
 \newpage
 \section{Elliptic curve functions}
