@@ -127,8 +127,8 @@ uint8_t *rsa_decrypt_signature
 
 \noindent
 Decrypts the signature in certificate {\tt p} using the public key in {\tt q} and returns the result.
-On success, result is returned in a malloc'd buffer that caller should free.
-Length of buffer is the same as signature length.
+On success, the result is returned in a malloc'd buffer that the caller should free.
+The length of the buffer is the same as the signature length.
 Returns NULL on error.
 
 \newpage
