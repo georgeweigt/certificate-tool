@@ -45,8 +45,8 @@ $k$\\
 
 \noindent
 By necessity $s$ and $k$ are compatible.
-For example, if $k$ is RSA 2048 then $s$ is a PKCS signature that is 2048 bits in length
-(256 bytes).
+For example, if $k$ is RSA 2048 then $s$ is a PKCS\footnote{RFC 3447 Public-Key Cryptography Standards (PKCS)}
+signature that is 2048 bits in length (256 bytes).
 
 \bigskip
 \noindent
@@ -403,5 +403,32 @@ The unencoded length of $R$ is 48 bytes and the unencoded length of $S$ is 48 by
        :       }
        :     }
 \end{verbatim}
+
+\newpage
+\section{References}
+
+\bigskip
+\noindent
+Burton S. Kaliski Jr., ``A Layman's Guide to a Subset of ASN.1, BER, and DER''
+
+\bigskip
+\noindent
+FIPS Publication 180-4, Secure Hash Standard
+
+\bigskip
+\noindent
+RFC 1321 The MD5 Message-Digest Algorithm
+
+\bigskip
+\noindent
+RFC 3447 Public-Key Cryptography Standards (PKCS)
+
+\bigskip
+\noindent
+``Mathematical routines for the NIST prime elliptic curves''
+
+\bigskip
+\noindent
+Certicom Corp., ``Elliptic Curve Cryptography''
 
 \end{document}
