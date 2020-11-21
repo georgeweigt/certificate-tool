@@ -43,5 +43,3 @@ Supported hash algorithms:
 	SHA256
 	SHA384
 	SHA512
-
-http://eigenmath.org/certificate-tool.pdf
