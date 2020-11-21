@@ -12,7 +12,7 @@ Check that certificate A is signed by B:
 
 	./ctool check A.pem B.pem
 
-Print keys:
+Print certificate keys:
 
 	./ctool key key.pem
 
