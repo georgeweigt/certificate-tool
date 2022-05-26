@@ -1,8 +1,8 @@
-[Documentation](https://georgeweigt.github.io/certificate-tool.pdf)
+[Primer](https://georgeweigt.github.io/certificate-tool.pdf)
 
-Plain and simple encryption code for certificates.
+Plain and simple crypto library for certificates.
 
-The main function is a demo.
+The following demo uses the library.
 
 To build and run:
 
