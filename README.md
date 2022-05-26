@@ -1,3 +1,5 @@
+[Certificate Tool Manual](https://georgeweigt.github.io/certificate-tool.pdf)
+
 Plain and simple encryption code for certificates.
 
 The main function is a demo.
