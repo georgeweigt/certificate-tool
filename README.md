@@ -1,4 +1,4 @@
-[Primer](https://georgeweigt.github.io/certificate-tool.pdf)
+[Intro](https://georgeweigt.github.io/certificate-tool.pdf)
 
 Plain and simple crypto library for certificates.
 
