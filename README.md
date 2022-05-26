@@ -1,4 +1,4 @@
-[Certificate Tool Manual](https://georgeweigt.github.io/certificate-tool.pdf)
+[Documentation](https://georgeweigt.github.io/certificate-tool.pdf)
 
 Plain and simple encryption code for certificates.
 
