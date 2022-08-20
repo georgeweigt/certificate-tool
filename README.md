@@ -1,4 +1,4 @@
-Plain and simple crypto library for certificates.
+Plain and simple crypto library for certificates
 
 `ctool` is an app that uses the library.
 
@@ -10,19 +10,19 @@ make
 ./ctool
 ```
 
-Sign certificate A with B and save as C
+Sign certificate A with B and save as C.
 
 ```
 ./ctool sign A.pem B.pem key.pem | tee C.pem
 ```
 
-Check that certificate C is signed by B
+Check that certificate C is signed by B.
 
 ```
 ./ctool check C.pem B.pem
 ```
 
-Print certificate keys
+Print certificate keys.
 
 ```
 ./ctool key key.pem
