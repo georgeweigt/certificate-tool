@@ -5,36 +5,26 @@ To build and run
 ```
 cd src
 make
+./m1
 ./ctool
 ```
 
 Sign certificate A with B and save as C.
 
 ```
-./ctool sign A.pem B.pem key.pem | tee C.pem
+./ctool sign a.pem b.pem key.pem | tee c.pem
 ```
 
 Check that certificate C is signed by B.
 
 ```
-./ctool check C.pem B.pem
+./ctool check c.pem b.pem
 ```
 
 Print certificate keys.
 
 ```
 ./ctool key key.pem
-```
-
-There are scripts in the tools directory for creating certificate files.
-
-Example
-
-```
-cd tools
-./m2
-../src/ctool sign a.pem b.pem key.pem | tee c.pem
-../src/ctool check c.pem b.pem
 ```
 
 Supported public key algorithms
@@ -55,3 +45,5 @@ SHA256
 SHA384
 SHA512
 ```
+
+Shell scripts m1-m5 create certificate files.

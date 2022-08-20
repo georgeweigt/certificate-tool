@@ -1,3 +1,5 @@
 *.o
+*.der
+*.pem
 *.swp
 ctool
