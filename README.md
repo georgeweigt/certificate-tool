@@ -1,6 +1,6 @@
-ctool is an app that uses the library.
+ctool is an app that uses the crypto library.
 
-To build and run
+To build and run ctool
 
 ```
 cd src
