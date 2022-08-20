@@ -1,12 +1,16 @@
 ctool is an app that uses the crypto library.
 
-To build and run ctool
+To build ctool
 
 ```
 cd src
 make
-./m1
-./ctool
+```
+
+Shell scripts m1-m5 create certificate files for demo.
+
+```
+.\m1
 ```
 
 Sign certificate A with B and save as C.
@@ -45,5 +49,3 @@ SHA256
 SHA384
 SHA512
 ```
-
-Shell scripts m1-m5 create certificate files.
