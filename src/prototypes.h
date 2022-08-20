@@ -1,3 +1,4 @@
+// Run 'make' in 'tools' directory to update this file
 int base64_decode(uint8_t *buf, char *s, int length);
 int base64_decode_digit(int c);
 void base64_print(FILE *f, uint8_t *buf, int len);

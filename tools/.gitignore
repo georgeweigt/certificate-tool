@@ -1,6 +1,3 @@
-*.der
-*.pem
-*.swp
 a.out
 dumpasn1
 dumpasn1.c
