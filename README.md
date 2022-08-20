@@ -16,13 +16,13 @@ Shell scripts m1-m5 create certificate files for demo.
 Sign certificate A with B and save as C.
 
 ```
-./ctool sign a.pem b.pem key.pem | tee c.pem
+./sign
 ```
 
 Check that certificate C is signed by B.
 
 ```
-./ctool check c.pem b.pem
+./check
 ```
 
 Print certificate keys.
