@@ -10,7 +10,7 @@ make
 Shell scripts m1-m5 create certificate files for demo.
 
 ```
-.\m1
+./m1
 ```
 
 Sign certificate A with B and save as C.
