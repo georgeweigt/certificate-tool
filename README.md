@@ -1,7 +1,5 @@
 Plain and simple crypto library for certificates.
 
-[doc](https://georgeweigt.github.io/certificate-tool.pdf)
-
 `ctool` is an app that uses the library.
 
 To build and run
