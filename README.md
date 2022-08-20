@@ -1,47 +1,61 @@
-[Intro](https://georgeweigt.github.io/certificate-tool.pdf)
-
 Plain and simple crypto library for certificates.
 
-The following demo uses the library.
+[doc](https://georgeweigt.github.io/certificate-tool.pdf)
 
-To build and run:
+`ctool` is an app that uses the library.
 
-	cd src
-	make
-	./ctool
+To build and run
 
-Check that certificate A is signed by B:
+```
+cd src
+make
+./ctool
+```
 
-	./ctool check A.pem B.pem
+Sign certificate A with B and save as C
 
-Print certificate keys:
+```
+./ctool sign A.pem B.pem key.pem | tee C.pem
+```
 
-	./ctool key key.pem
+Check that certificate C is signed by B
 
-Sign certificate A with B and save as C:
+```
+./ctool check C.pem B.pem
+```
 
-	./ctool sign A.pem B.pem key.pem | tee C.pem
+Print certificate keys
+
+```
+./ctool key key.pem
+```
 
 There are scripts in the tools directory for creating certificate files.
 
-Example:
+Example
 
-	cd tools
-	./m2
-	../src/ctool sign a.pem b.pem key.pem | tee c.pem
-	../src/ctool check c.pem b.pem
+```
+cd tools
+./m2
+../src/ctool sign a.pem b.pem key.pem | tee c.pem
+../src/ctool check c.pem b.pem
+```
 
-Supported public key algorithms:
+Supported public key algorithms
 
-	RSA
-	prime256v1 (NIST P-256)
-	secp384r1 (NIST P-384)
+```
+RSA
+prime256v1 (NIST P-256)
+secp384r1 (NIST P-384)
+```
 
-Supported hash algorithms:
+Supported hash algorithms
 
-	MD5
-	SHA1
-	SHA224
-	SHA256
-	SHA384
-	SHA512
+```
+MD5
+SHA1
+SHA224
+SHA256
+SHA384
+SHA512
+```
