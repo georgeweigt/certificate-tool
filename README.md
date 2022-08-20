@@ -13,7 +13,7 @@ Create certificate files for demo.
 ./m1
 ```
 
-Sign certificate A with B and save as C. (Shell scripts `sign` and `check` invoke ctool.)
+Sign certificate A with B and save as C. (Bash scripts `sign` and `check` invoke ctool.)
 
 ```
 ./sign
