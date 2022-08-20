@@ -7,7 +7,7 @@ cd src
 make
 ```
 
-Shell scripts m1-m5 create certificate files for demo.
+Create certificate files for demo.
 
 ```
 ./m1
