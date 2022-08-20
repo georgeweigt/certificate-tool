@@ -12,4 +12,4 @@ ctool: $(objects)
 $(objects) : defs.h prototypes.h
 
 clean:
-	rm -f ctool *.o
+	rm -f ctool *.o *.pem *.der
