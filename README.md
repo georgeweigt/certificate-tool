@@ -1,4 +1,5 @@
-`ctool` is an app that uses the library.
+ctool is an app that uses the library.
+
 To build and run
 
 ```
