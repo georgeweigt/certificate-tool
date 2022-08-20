@@ -1,5 +1,3 @@
-Plain and simple crypto library for certificates.
-
 `ctool` is an app that uses the library.
 
 To build and run
