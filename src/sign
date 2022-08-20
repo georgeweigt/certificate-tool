@@ -1,0 +1,2 @@
+#!/bin/bash
+./ctool sign a.pem b.pem key.pem | tee c.pem
