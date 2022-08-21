@@ -7,4 +7,4 @@ certificate-tool.pdf: certificate-tool.tex
 	pdflatex certificate-tool.tex
 
 clean:
-	rm -f *.aux *.log *.pdf *.synctex.gz *.toc
+	rm -f $(shell ls certificate-tool.* | sed "s/certificate-tool\.tex//")
