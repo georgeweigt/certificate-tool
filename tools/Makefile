@@ -1,7 +1,7 @@
 .PHONY: default clean
 
 default:
-	make a.out
+	make -s a.out
 	./a.out ../src/ >../src/prototypes.h
 
 a.out: make-prototypes.c

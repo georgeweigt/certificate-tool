@@ -1,15 +1,13 @@
+.PHONY: clean
 CC = gcc
-CFLAGS = -Wall -O0
+CFLAGS = -O0
 
-# := means evaluate then assign result to variable
-# sed removes the commas then replaces .c with .o
+objs := $(shell ls *.c | sed "s/\.c/\.o/g")
 
-objects := $(shell ls -m *.c | sed "s/,//g;s/\.c/\.o/g")
+ctool: $(objs)
+	gcc -o ctool $(objs)
 
-ctool: $(objects)
-	gcc $(objects) -o ctool
-
-$(objects) : defs.h prototypes.h
+$(objs) : defs.h prototypes.h
 
 clean:
 	rm -f ctool *.o *.pem *.der
