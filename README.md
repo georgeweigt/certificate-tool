@@ -49,3 +49,7 @@ SHA256
 SHA384
 SHA512
 ```
+
+#
+
+[certificate-tool.pdf](https://georgeweigt.github.io/certificate-tool.pdf)
