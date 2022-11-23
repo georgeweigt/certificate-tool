@@ -48,9 +48,9 @@ check(char *filename1, char *filename2)
 	err = check_signature(p, q);
 
 	if (err == 0)
-		printf("yes\n");
+		printf("ok\n");
 	else
-		printf("no\n");
+		printf("fail\n");
 
 	free(p);
 	free(q);
