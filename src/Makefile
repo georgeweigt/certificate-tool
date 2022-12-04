@@ -1,6 +1,7 @@
 .PHONY: clean
 
 demo: *.h *.c
+	make prototypes.h
 	gcc -Wall -O0 -o ctool *.c -lm
 
 prototypes.h: *.c
