@@ -1,5 +1,3 @@
-ctool is an app that uses the crypto library.
-
 To build ctool
 
 ```
