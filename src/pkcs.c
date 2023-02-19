@@ -1,5 +1,3 @@
-#include "defs.h"
-
 // generate pkcs signatures (caller must free result)
 
 uint8_t *

@@ -1,5 +1,3 @@
-#include "defs.h"
-
 int ec_malloc_count;
 
 uint32_t *p256, *q256, *gx256, *gy256;

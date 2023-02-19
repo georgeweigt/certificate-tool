@@ -1,5 +1,3 @@
-#include "defs.h"
-
 struct certinfo *
 read_certificate(char *filename)
 {

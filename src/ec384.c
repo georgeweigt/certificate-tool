@@ -1,5 +1,3 @@
-#include "defs.h"
-
 // encrypts a hash value (48 bytes max) and returns the 96 byte result in sig
 
 void

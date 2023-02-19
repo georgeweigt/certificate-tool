@@ -1,5 +1,3 @@
-#include "defs.h"
-
 // Returns 0 if p is signed by q
 
 int

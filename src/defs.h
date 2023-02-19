@@ -176,5 +176,3 @@ struct point {
 };
 
 #define Trace fprintf(stderr, "%s %d\n", __FUNCTION__, __LINE__);
-
-#include "prototypes.h"

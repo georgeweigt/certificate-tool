@@ -1,5 +1,3 @@
-#include "defs.h"
-
 int
 base64_decode(uint8_t *buf, char *s, int length)
 {

@@ -1,5 +1,3 @@
-#include "defs.h"
-
 // Sign certificate p with q and return the result.
 //
 // Argument 'key' is q's private key.

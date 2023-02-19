@@ -1,13 +1,13 @@
 .PHONY: clean
 
-# specify prototypes.h in case the file is missing
+CFILES := $(shell ls *.c)
 
-demo: prototypes.h *.h *.c
-	gcc -Wall -O0 -o ctool *.c -lm
+demo: defs.h prototypes.h $(CFILES)
+	gcc -Wall -O0 -o ctool -include defs.h -include prototypes.h $(CFILES) -lm
 
-prototypes.h: *.c
+prototypes.h: $(CFILES)
 	make -s -C ../tools make-prototypes
 	../tools/make-prototypes . > prototypes.h
 
 clean:
-	rm -f ctool
+	rm -f ctool prototypes.h

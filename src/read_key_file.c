@@ -1,5 +1,3 @@
-#include "defs.h"
-
 struct keyinfo *
 read_key_file(char *filename)
 {

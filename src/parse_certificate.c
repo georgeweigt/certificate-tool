@@ -1,5 +1,3 @@
-#include "defs.h"
-
 // Outline of a certificate (not all TLVs shown)
 //
 //   SEQUENCE

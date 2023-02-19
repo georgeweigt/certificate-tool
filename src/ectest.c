@@ -1,5 +1,3 @@
-#include "defs.h"
-
 void
 ec_test()
 {

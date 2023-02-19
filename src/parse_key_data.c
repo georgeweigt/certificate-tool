@@ -1,5 +1,3 @@
-#include "defs.h"
-
 int
 parse_key_data(struct keyinfo *p)
 {

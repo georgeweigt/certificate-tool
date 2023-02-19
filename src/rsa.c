@@ -1,5 +1,3 @@
-#include "defs.h"
-
 #define MLENGTH(u) (u)[-1]
 
 // Decrypts p's signature using q's public key and returns the result.
