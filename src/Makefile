@@ -2,7 +2,7 @@
 
 CFILES := $(shell ls *.c)
 
-demo: defs.h prototypes.h $(CFILES)
+ctool: defs.h prototypes.h $(CFILES)
 	gcc -Wall -O0 -o ctool -include defs.h -include prototypes.h $(CFILES) -lm
 
 prototypes.h: $(CFILES)
