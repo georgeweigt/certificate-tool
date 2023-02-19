@@ -1,4 +1,4 @@
-.PHONY: clean
+.PHONY: clean checkall
 
 CFILES := $(shell ls *.c)
 
@@ -11,3 +11,8 @@ prototypes.h: $(CFILES)
 
 clean:
 	rm -f ctool prototypes.h
+
+checkall:
+	make -s -C ../tools wcheck
+	../tools/wcheck defs.h
+	for FILE in $(CFILES); do ../tools/wcheck $$FILE; done
