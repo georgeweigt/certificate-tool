@@ -1,8 +1,11 @@
 .PHONY: clean checkall
 
+HFILES := $(shell ls *.h)
 CFILES := $(shell ls *.c)
 
-ctool: defs.h prototypes.h $(CFILES)
+# specify prototypes.h in case it's missing from HFILES
+
+ctool: prototypes.h $(HFILES) $(CFILES)
 	gcc -Wall -O0 -o ctool -include defs.h -include prototypes.h $(CFILES) -lm
 
 prototypes.h: $(CFILES)
@@ -14,5 +17,5 @@ clean:
 
 checkall:
 	make -s -C ../tools wcheck
-	../tools/wcheck defs.h
+	for FILE in $(HFILES); do ../tools/wcheck $$FILE; done
 	for FILE in $(CFILES); do ../tools/wcheck $$FILE; done
