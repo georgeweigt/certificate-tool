@@ -1,13 +1,11 @@
 .PHONY: clean check
 
-CFILES := $(shell ls *.c)
+ctool: defs.h prototypes.h *.c
+	gcc -Wall -O0 -o ctool -include defs.h -include prototypes.h *.c -lm
 
-ctool: defs.h prototypes.h $(CFILES)
-	gcc -Wall -O0 -o ctool -include defs.h -include prototypes.h $(CFILES) -lm
-
-prototypes.h: $(CFILES)
+prototypes.h: *.c
 	make -s -C ../tools make-prototypes
-	../tools/make-prototypes . > prototypes.h
+	../tools/make-prototypes *.c > prototypes.h
 
 clean:
 	rm -f ctool prototypes.h
