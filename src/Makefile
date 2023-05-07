@@ -1,7 +1,7 @@
 .PHONY: clean check
 
 ctool: defs.h prototypes.h *.c
-	gcc -Wall -O0 -o ctool -include defs.h -include prototypes.h *.c -lm
+	gcc -Wall -O0 -o ctool -include defs.h -include prototypes.h *.c
 
 prototypes.h: *.c
 	make -s -C ../tools make-prototypes
